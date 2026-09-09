@@ -1,0 +1,75 @@
+<iframe id="frame" allowfullscreen="" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock allow-modals allow-orientation-lock allow-downloads allow-presentation" allow="autoplay; fullscreen; gamepad; clipboard-write; encrypted-media; screen-wake-lock" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;script&gt;
+  if (window.parent !== window.self) window.parent.postMessage(&quot;bonk&quot;, &quot;*&quot;);
+  window.addEventListener(&quot;DOMContentLoaded&quot;, function () {
+    document.body.style.margin = &quot;0&quot;;
+    document.body.style.height = &quot;100vh&quot;;
+    document.body.style.overflow = &quot;hidden&quot;;
+  });
+&lt;/script&gt;
+&lt;html lang=&quot;en-us&quot;&gt;
+  &lt;head&gt;&lt;base href=&quot;https://cdn.jsdelivr.net/gh/zennedu/3kh@main/slope/&quot;&gt;
+    &lt;meta charset=&quot;utf-8&quot; /&gt;
+    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt;
+    &lt;title&gt;Slope&lt;/title&gt;
+    &lt;link href=&quot;shared/style.css&quot; rel=&quot;stylesheet&quot; /&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;TemplateData56/style.css&quot; /&gt;
+    &lt;script src=&quot;TemplateData56/UnityProgress.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;shortcut icon&quot; href=&quot;TemplateData/favicon.ico&quot; /&gt;
+    &lt;link rel=&quot;icon&quot; href=&quot;slope4.jpeg&quot; /&gt;
+    &lt;script src=&quot;Build/UnityLoader.js&quot;&gt;&lt;/script&gt;
+    &lt;script&gt;
+      window.rWS = WebSocket;
+      WebSocket = function (url, options) {
+        var split = url.split(&quot;://&quot;);
+        var prefix = &quot;&quot;;
+        if (!url.includes(&quot;arc.io&quot;)) {
+          switch (split[0].toLowerCase()) {
+            case &quot;ws&quot;:
+              prefix = &quot;wss://onebigorange-tmm.tbt.mx/websocket/http://&quot;;
+              break;
+            case &quot;wss&quot;:
+              prefix = &quot;wss://onebigorange-tmm.tbt.mx/websocket/https://&quot;;
+              break;
+            default:
+              prefix = split[0];
+          }
+          return new (Function.prototype.bind.call(window.rWS, null, (split[1].match(/\//g) || []).length === 0 ? (split[1].includes(&quot;?&quot;) ? prefix + split[1].replace(&quot;?&quot;, &quot;/?&quot;) : prefix + split[1] + &quot;/&quot;) : prefix + split[1], options))();
+        } else {
+          return new window.rWS(url, options);
+        }
+      };
+      var origOpen = XMLHttpRequest.prototype.open;
+      XMLHttpRequest.prototype.open = function (...args) {
+        if (!args[1].includes(&quot;arc.io&quot;)) args[1] = /^http/.test(args[1]) ? &quot;https://onebigstatic-tmm.tbt.mx/static/&quot; + args[1] : args[1];
+        origOpen.apply(this, args);
+      };
+      var gameInstance = UnityLoader.instantiate(&quot;gameContainer&quot;, &quot;Build/slope_27Sept.json&quot;, {
+        onProgress: UnityProgress,
+        Module: {
+          onRuntimeInitialized: function () {
+            UnityProgress(gameInstance, &quot;complete&quot;);
+          },
+        },
+      });
+    &lt;/script&gt;
+    &lt;script async src=&quot;https://www.googletagmanager.com/gtag/js?id=G-98DP5VKS42&quot;&gt;&lt;/script&gt;
+    &lt;script&gt;
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag(&quot;js&quot;, new Date());
+      gtag(&quot;config&quot;, &quot;G-98DP5VKS42&quot;);
+    &lt;/script&gt;
+    &lt;script src=&quot;shared/lib.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;shared/gamebreak/gamebreak.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div class=&quot;webgl-content&quot;&gt;
+      &lt;div id=&quot;gameContainer&quot; style=&quot;width: 100vw; height: 100vh;&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;script type=&quot;application/javascript&quot; src=&quot;/js/main.js&quot;&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+"></iframe>
