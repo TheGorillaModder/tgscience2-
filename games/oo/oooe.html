@@ -1,0 +1,387 @@
+<html><head><script src="https://cdn.jsdelivr.net/gh/Arjun99ab/ovo@main/1.4.5/offlineClient.js"></script><style>.animated,animated.hinge,.animated.flipOutX,.animated.flipOutY,.animated.bounceIn,.animated.bounceOut,.animated.flipOutXX,.animated.flipInXX,.animated.flipInYY,.animated.flipOutYY{-webkit-animation-duration: 0.7s !important;animation-duration: 0.7s !important;}</style><script type="text/javascript" src="lzma.js"></script><script type="text/javascript" src="unlockalllevels.js"></script><script type="text/javascript" src="websdkwrapper.js"></script><script type="text/javascript" src="ovo-level-editor.js"></script><script type="text/javascript" src="ovo-multiplayer.js"></script><style>
+  canvas {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+  }
+  </style><link rel="stylesheet" type="text/css" href="style.css"><link href="fonts.css" rel="stylesheet" type="text/css"><link href="./fonts.css" rel="stylesheet" type="text/css"><link href="./fonts.css" rel="stylesheet" type="text/css"><style>
+          #ovo-multiplayer-disconnected-container {
+              pointer-events: none;
+          }
+          #ovo-multiplayer-other-container {
+              pointer-events: none;
+          }
+          #ovo-multiplayer-container {
+              pointer-events: none;
+          }
+          #ovo-multiplayer-tab-container {
+              pointer-events: all;
+          }
+          .ovo-multiplayer-button-holder {
+              pointer-events: all;
+          }
+          .ovo-multiplayer-tab {
+              pointer-events: all;
+          }
+          .ovo-multiplayer-button {
+              pointer-events: all;
+          }
+          
+          </style></head><body><module>
+<content type="html"><!--[CDATA[
+
+
+<!DOCTYPE html-->
+
+
+<!-- Ultimate Game Stash file--> 
+<!-- For the regularly updating doc go to https://docs.google.com/document/d/1_FmH3BlSBQI7FGgAQL59-ZPe8eCxs35wel6JUyVaG8Q/ -->
+
+
+
+
+  <!-- Google tag (gtag.js) -->
+  <base href="https://cdn.jsdelivr.net/gh/bubbls/UGS-Assets@main/ovomod/">
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-06HTML1QC5"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date()); 
+
+        gtag('config', 'G-06HTML1QC5');
+    </script>
+    <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>OvO</title>
+  <!-- Standardised web app manifest -->
+  <link rel="manifest" href="appmanifest.json">
+  
+  <!-- Allow fullscreen mode on iOS devices. (These are Apple specific meta tags.) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="apple-touch-icon" sizes="256x256" href="icon-256.png">
+  <meta name="HandheldFriendly" content="true">
+  
+  <!-- Chrome for Android web app tags -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="shortcut icon" sizes="256x256" href="icon-256.png">
+
+    <!-- All margins and padding must be zero for the canvas to fill the screen. -->
+  <style type="text/css">
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    html, body {
+      background: #000;
+      color: #fff;
+      overflow: hidden;
+      touch-action: none;
+      -ms-touch-action: none;
+    }
+    canvas {
+      touch-action-delay: none;
+      touch-action: none;
+      -ms-touch-action: none;
+    }
+    </style>
+  
+  <link href="animate.css" rel="stylesheet" type="text/css">
+  <link href="hmmg_layoutTransition.css" rel="stylesheet" type="text/css">
+  <link href="jquery.gritter.css" rel="stylesheet" type="text/css">
+
+ 
+ 
+ 
+  <div id="fb-root"></div>
+  
+  <script>
+  // Issue a warning if trying to preview an exported project on disk.
+  (function(){
+    // Check for running exported on file protocol
+    if (window.location.protocol.substr(0, 4) === "file")
+    {
+      alert("Exported games won't work until you upload them. (When running on the file:/// protocol, browsers block many features from working for security reasons.)");
+    }
+  })();
+  </script>
+  
+  <!-- The canvas must be inside a div called c2canvasdiv -->
+  
+  
+  <!-- Pages load faster with scripts at the bottom -->
+  
+  <!-- Construct 2 exported games require jQuery. -->
+  <script src="jquery-3.4.1.min.js"></script>
+<script>
+(function() {
+    // Intercept ALL image creation
+    var OriginalImage = window.Image;
+    window.Image = function() {
+        var img = new OriginalImage();
+        img.crossOrigin = "anonymous";
+        return img;
+    };
+    
+    // Also intercept createElement for img tags
+    var originalCreateElement = document.createElement.bind(document);
+    document.createElement = function(tagName) {
+        var element = originalCreateElement(tagName);
+        if (tagName.toLowerCase() === 'img') {
+            element.crossOrigin = "anonymous";
+        }
+        return element;
+    };
+})();
+</script>
+  <script src="GameAnalytics.js"></script>
+  <script src="Tween.js"></script>
+  <script src="html2canvas.min.js"></script>
+  <script src="jquery.gritter.js"></script>
+  <script src="howler.js"></script>
+
+  
+    <!-- The runtime script.  You can rename it, but don't forget to rename the reference here as well.
+    This file will have been minified and obfuscated if you enabled "Minify script" during export. -->
+  <script src="c7runtime.js"></script>
+
+    <script>
+    // Start the Construct 2 project running on window load. 
+    jQuery(document).ready(function ()
+    {     
+      // Create new runtime using the c2canvas
+      cr_createRuntime("c2canvas");
+    });
+    
+    // Pause and resume on page becoming visible/invisible
+    function onVisibilityChanged() {
+      if (document.hidden || document.mozHidden || document.webkitHidden || document.msHidden)
+        cr_setSuspended(true);
+      else
+        cr_setSuspended(false);
+    };
+    
+    document.addEventListener("visibilitychange", onVisibilityChanged, false);
+    document.addEventListener("mozvisibilitychange", onVisibilityChanged, false);
+    document.addEventListener("webkitvisibilitychange", onVisibilityChanged, false);
+    document.addEventListener("msvisibilitychange", onVisibilityChanged, false);
+    
+    function OnRegisterSWError(e)
+    {
+      console.warn("Failed to register service worker: ", e);
+    };
+    
+    // Runtime calls this global method when ready to start caching (i.e. after startup).
+    // This registers the service worker which caches resources for offline support.
+    window.C2_RegisterSW = function C2_RegisterSW()
+    {
+      if (!navigator.serviceWorker)
+        return;   // no SW support, ignore call
+      
+      try {
+        navigator.serviceWorker.register("sw.js", { scope: "./" })
+        .then(function (reg)
+        {
+          console.log("Registered service worker on " + reg.scope);
+        })
+        .catch(OnRegisterSWError);
+      }
+      catch (e)
+      {
+        OnRegisterSWError(e);
+      }
+    };
+    </script>
+  <script type="text/javascript">
+    
+        var VERSION = VERSION || (function(){
+            return {
+                version : function() {
+                    return "CTLE"
+                },
+        skinVersion : function() {
+          return "1.4.5"
+        },
+        replayVersion : function() {
+          return "1.4.4"
+        },
+            };
+        }());
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/Arjun99ab/ovo@main/src/modloaders/modloader.js" id="modloader" type="module" defer=""></script>
+
+<!-- Sticky Bottom Center Ad (728x90) with Smooth Slide-Out and Reappearance -->
+<style>
+  /* Container: Bottom center, fixed, with overflow hidden */
+  #ad-container {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(728px, calc(100% - 20px)); /* 728px, 10px margin on mobile */
+    height: 90px;
+    background: rgba(0, 0, 0, 0.90);
+    display: none;
+    z-index: 99999;
+    border-radius: 0; /* Sharp corners */
+    overflow: hidden;
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.45);
+    box-sizing: border-box;
+    transition: transform 0.5s ease-in-out; /* Smooth slide-in/out animation */
+  }
+
+  /* Slide-out animation */
+  #ad-container.hidden {
+    transform: translate(-50%, 100%); /* Slide down out of view */
+  }
+
+  #ad-iframe {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 745px; /* Updated width */
+    height: 90px; /* Updated height */
+    border: 0;
+    display: block;
+    overflow: hidden;
+    pointer-events: auto;
+    box-sizing: content-box;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  #ad-iframe::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  /* Close button with arrow */
+  #close-ad {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    background: #ff4d4d;
+    color: #fff;
+    border: none;
+    padding: 5px 9px;
+    font-size: 13px;
+    border-radius: 4px;
+    cursor: not-allowed;
+    opacity: 0.72;
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+  }
+  #close-ad.enabled {
+    cursor: pointer;
+    opacity: 1;
+  }
+  #close-ad::before {
+    content: '↓'; /* Down arrow for bottom ad */
+    margin-right: 4px;
+  }
+
+  /* Right mask for scrollbar */
+  #ad-right-mask {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 12px;
+    height: 100%;
+    pointer-events: none;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.9));
+    z-index: 99999;
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 440px) {
+    #ad-container {
+      width: calc(100% - 12px);
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 0; /* Sharp corners on mobile */
+    }
+    #ad-iframe {
+      width: 728px;
+    }
+  }
+</style>
+
+<div id="ad-container" aria-hidden="false" role="dialog" aria-label="Advertisement" style="display: block;">
+  <iframe id="ad-iframe" src="https://script.google.com/macros/s/AKfycbzNG4z_PlG6Ke_bX5wSPKK2uBRB3IY9ouVzqM1shucYhSTvsJWRmyMyZaaC2z5S3ADN/exec" width="768px" height="95px" scrolling="no" frameborder="0" sandbox="allow-scripts allow-popups allow-same-origin"></iframe>
+  <button id="close-ad" class="enabled">Close ↓</button>
+  <div id="ad-right-mask"></div>
+</div>
+
+<script>
+  (function () {
+    const showDelay = 2000; // 2 seconds delay before first show
+    const countdownStart = 12; // 12 seconds countdown
+    const reappearDelay = 60000; // 25 seconds before reappearance
+    const adContainer = document.getElementById('ad-container');
+    const closeBtn = document.getElementById('close-ad');
+
+    function showAd() {
+      // Show ad with smooth slide-in
+      adContainer.style.display = 'block';
+      adContainer.classList.remove('hidden');
+      adContainer.setAttribute('aria-hidden', 'false');
+
+      // Start countdown
+      let timeLeft = countdownStart;
+      closeBtn.textContent = `Close (${timeLeft})`;
+      closeBtn.disabled = true;
+      closeBtn.classList.remove('enabled');
+
+      const t = setInterval(() => {
+        timeLeft--;
+        if (timeLeft > 0) {
+          closeBtn.textContent = `Close (${timeLeft})`;
+        } else {
+          clearInterval(t);
+          closeBtn.disabled = false;
+          closeBtn.classList.add('enabled');
+          closeBtn.textContent = 'Close ↓';
+        }
+      }, 1000);
+    }
+
+    // Initial ad show
+    setTimeout(showAd, showDelay);
+
+    // Close with animation and schedule reappearance
+    closeBtn.addEventListener('click', () => {
+      if (closeBtn.disabled) return;
+      adContainer.classList.add('hidden');
+      adContainer.setAttribute('aria-hidden', 'true');
+      // Schedule reappearance without removing or reloading iframe
+      setTimeout(showAd, reappearDelay);
+    });
+  })();
+</script>
+
+ 
+ 
+
+
+]]&gt;</content>
+</module><div id="banner-container" style="position: absolute; overflow: visible; transform: rotate(0deg); top: 370.793px; left: 212.018px; width: 390.981px; height: 108.247px; display: none;"></div><div id="c2canvasdiv" style="width: 815px; height: 517px; margin-left: 0px; margin-top: 0px;" class="">
+  
+    <!-- The canvas the project will render to.  If you change its ID, don't forget to change the
+    ID the runtime looks for in the jQuery events above (ready() and cr_sizeCanvas()). -->
+    <canvas id="c2canvas" width="815" height="517" ondragover="event.preventDefault();" ondrop="ovoLevelEditor.handleDrop(event)">
+      <!-- This text is displayed if the visitor's browser does not support HTML5.
+      You can change it, but it is a good idea to link to a description of a browser
+      and provide some links to download some popular HTML5-compatible browsers. -->
+      <h1>Your browser does not appear to support HTML5.  Try upgrading your browser to the latest version.  <a href="http://www.whatbrowser.org">What is a browser?</a>
+      <br><br><a href="http://www.microsoft.com/windows/internet-explorer/default.aspx">Microsoft Internet Explorer</a><br>
+      <a href="http://www.mozilla.com/firefox/">Mozilla Firefox</a><br>
+      <a href="http://www.google.com/chrome/">Google Chrome</a><br>
+      <a href="http://www.apple.com/safari/download/">Apple Safari</a></h1>
+    </canvas>
+    
+  </div><div id="cheat-indicator" style="background-color: rgba(150, 10, 1, 0.8); width: 5px; height: 5px; position: absolute; bottom: 5px; right: 5px; z-index: 2147483647; display: none;"></div></body></html>
