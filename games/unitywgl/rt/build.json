@@ -1,0 +1,9 @@
+{
+"TOTAL_MEMORY": 268435456,
+"dataUrl": "build.data",
+"asmCodeUrl": "build.asm.code",
+"asmMemoryUrl": "build.asm.memory",
+"asmFrameworkUrl": "build.asm.framework",
+"splashScreenStyle": "Dark",
+"backgroundColor": "#000000"
+}
