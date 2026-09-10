@@ -1,0 +1,9 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "tgscience26",
+  "main": "",
+  "assets": {
+    "directory": "."
+  },
+  "compatibility_date": "2026-09-09"
+}
