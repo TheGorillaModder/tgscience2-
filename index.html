@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TG Science 2026</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+        :root {
+            --bg-color: #f5f5f7;
+            --text-color: #1d1d1f;
+            --card-bg: #ffffff;
+            --header-bg: rgba(255, 255, 255, 0.8);
+            --accent-color: #0071e3;
+            --border-radius: 16px;
+            --shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --glass-border: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #000000;
+            --text-color: #f5f5f7;
+            --card-bg: #1c1c1e;
+            --header-bg: rgba(28, 28, 30, 0.8);
+            --accent-color: #2997ff;
+            --shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: var(--transition);
+            min-height: 100vh;
+        }
+
+        header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 60px;
+            background: var(--header-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 1000;
+        }
+        .logo { font-weight: 700; font-size: 1.2rem; letter-spacing: -0.5px; }
+        .nav-links { display: flex; gap: 20px; }
+        .nav-links button {
+            background: none; border: none; color: var(--text-color);
+            font-size: 1rem; font-weight: 500; cursor: pointer;
+            opacity: 0.6; transition: var(--transition);
+        }
+        .nav-links button.active, .nav-links button:hover { opacity: 1; }
+        .theme-btn {
+            background: var(--card-bg); border: 1px solid var(--glass-border);
+            color: var(--text-color); padding: 6px 12px; border-radius: 20px;
+            cursor: pointer; font-size: 0.9rem; transition: var(--transition);
+        }
+
+        main { padding: 80px 24px 40px; max-width: 1200px; margin: 0 auto; }
+        .view-section { display: none; animation: fadeIn 0.4s ease forwards; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .home-stats {
+            background: var(--card-bg); padding: 40px; border-radius: var(--border-radius);
+            text-align: center; box-shadow: var(--shadow); border: 1px solid var(--glass-border);
+            margin-top: 40px;
+        }
+        .home-stats h1 { font-size: 3rem; margin-bottom: 10px; color: var(--accent-color); }
+        .home-stats p { font-size: 1.2rem; opacity: 0.8; margin-bottom: 20px; }
+        .milestone-badge {
+            display: inline-block; padding: 10px 20px;
+            background: rgba(0, 113, 227, 0.1); color: var(--accent-color);
+            border-radius: 30px; font-weight: 600; font-size: 0.95rem;
+        }
+
+        .controls-bar {
+            display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 24px;
+            background: var(--card-bg); padding: 16px; border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow); border: 1px solid var(--glass-border);
+            align-items: center;
+        }
+        .controls-bar select, .controls-bar input {
+            padding: 8px 12px; border-radius: 8px; border: 1px solid var(--glass-border);
+            background: var(--bg-color); color: var(--text-color); font-size: 0.9rem;
+            outline: none;
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .category-group { margin-bottom: 40px; }
+        .category-header { font-size: 1.5rem; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--glass-border); }
+
+        .game-card {
+            aspect-ratio: 1 / 1;
+            border-radius: var(--border-radius);
+            position: relative; overflow: hidden; cursor: pointer;
+            box-shadow: var(--card-shadow);
+            background-size: cover; background-position: center;
+            transition: var(--transition);
+        }
+        .game-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: var(--shadow); }
+        .card-overlay {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+            padding: 40px 16px 16px; color: white; display: flex;
+            flex-direction: column; justify-content: flex-end;
+        }
+        .card-title { font-weight: 600; font-size: 1.1rem; margin-bottom: 4px; }
+        .card-plays { font-size: 0.8rem; opacity: 0.8; }
+        .card-tags {
+            position: absolute; top: 10px; right: 10px;
+            display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end;
+        }
+        .tag-badge { background: rgba(0,0,0,0.6); color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.7rem; backdrop-filter: blur(4px); }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+            display: none; justify-content: center; align-items: center;
+            z-index: 2000; padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-content {
+            background: var(--card-bg); width: 100%; max-width: 900px;
+            width: 95vw;
+            height: 90vh;
+            max-width: 1400px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+        }
+        .modal-header {
+            padding: 16px 24px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .modal-title { font-size: 1.2rem; font-weight: 600; }
+        .modal-stats { font-size: 0.9rem; opacity: 0.8; margin-left: auto; margin-right: 20px; text-align: right;}
+        .modal-controls button {
+            background: var(--bg-color); border: 1px solid var(--glass-border); color: var(--text-color);
+            padding: 8px 12px; border-radius: 8px; cursor: pointer; margin-left: 8px;
+        }
+        .modal-controls button:hover { background: var(--accent-color); color: white; }
+        .modal-body {
+            flex-grow: 1; background: #000; min-height: 400px;
+            display: flex; justify-content: center; align-items: center; color: #fff;
+            height: 100%; width: 100%;
+            position: relative;
+            left: 0px; top: 0px;
+        }
+
+        iframe {
+            position: relative;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+        }
+
+.movies-controls {
+    display: flex;
+    gap: 12px;
+}
+
+.movies-controls input {
+    flex-grow: 1;
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    outline: none;
+}
+
+.movies-controls button {
+    padding: 12px 24px;
+    border-radius: 12px;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.movies-controls button:hover {
+    transform: scale(1.02);
+    opacity: 0.9;
+}
+
+
+.music-controls {
+    display: flex;
+    gap: 12px;
+}
+
+.music-controls input {
+    flex-grow: 1;
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    outline: none;
+}
+
+.music-controls button {
+    padding: 12px 24px;
+    border-radius: 12px;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.music-controls button:hover {
+    transform: scale(1.02);
+    opacity: 0.9;
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 160px);
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--glass-border);
+    overflow: hidden;
+}
+
+.chat-display {
+    flex-grow: 1;
+    padding: 30px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.chat-message .message-content h1,
+.chat-message .message-content h2,
+.chat-message .message-content h3 {
+    margin: 8px 0 4px 0;
+    font-size: 1.1rem;
+}
+
+.chat-message .message-content ul,
+.chat-message .message-content ol {
+    margin: 6px 0 6px 20px;
+    padding-left: 10px;
+}
+
+.chat-message .message-content li {
+    margin-bottom: 4px;
+}
+
+.chat-message .message-content p {
+    margin: 4px 0;
+}
+
+.chat-message .message-content code {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+.user-message {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.ai-message {
+    align-self: flex-start;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+
+.user-message .message-content {
+    background: var(--accent-color);
+    color: white;
+    padding: 16px 20px;
+    border-radius: 20px 20px 4px 20px;
+    font-size: 1rem;
+}
+
+.ai-message .message-content {
+    background: var(--bg-color);
+    color: var(--text-color);
+    padding: 16px 20px;
+    border-radius: 20px 20px 20px 4px;
+    border: 1px solid var(--glass-border);
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.chat-input-area {
+    padding: 20px;
+    background: var(--bg-color);
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    gap: 12px;
+}
+
+.chat-input-area input {
+    flex-grow: 1;
+    padding: 14px 24px;
+    border-radius: 30px;
+    border: 1px solid var(--glass-border);
+    background: var(--card-bg);
+    color: var(--text-color);
+    outline: none;
+    font-size: 1rem;
+}
+
+.chat-input-area button {
+    padding: 0 28px;
+    border-radius: 30px;
+    background: var(--text-color);
+    color: var(--bg-color);
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.info-btn-transparent {
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+    cursor: pointer;
+    display: inline-flex;
+    margin-left: 15px;
+    transition: transform 0.2s ease;
+}
+
+.info-btn-transparent:hover {
+    transform: scale(1.1);
+}
+
+.info-btn-transparent img {
+    display: block;
+}
+        
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">TG Science 2026</div>
+        <div class="nav-links">
+            <button class="active" onclick="switchTab('home')">Home</button>
+            <button onclick="switchTab('games')">Games</button>
+            <!--<button onclick="switchTab('movies')">Movies</button>
+            <button onclick="switchTab('music')">Music</button>
+            <button onclick="switchTab('ai')">AI</button>
+            <button onclick="switchTab('pr0xy')">Pr0xy</button>-->
+        </div>
+        <button class="theme-btn" onclick="toggleTheme()">☀️ / 🌙</button>
+    </header>
+
+    <main>
+        <section id="view-home" class="view-section active">
+            <div class="home-stats">
+                <h2>Total Website Plays</h2>
+                <h1 id="global-plays-display">Loading...</h1>
+                <!--<h2>Total AI Requests</h2>
+                <h1 id="global-ai-requests-display">Loading...</h1>
+                <h2>Total AI Tokens Used</h2>
+                <h1 id="global-ai-tokens-display">Loading...</h1>-->
+                <p style="margin-top: 15px;">Session Time: <span id="time-on-page-display">0s</span></p>
+                <p>Thanks for playing and supporting the platform!</p>
+                <!--<div class="milestone-badge">🚀 About 1000 plays and a proxy gets added!</div>-->
+            </div>
+        </section>
+
+        <section id="view-games" class="view-section">
+            <div class="controls-bar">
+                <label>Sort By: 
+                    <select id="sort-select" onchange="renderGames()">
+                        <option value="alpha">Alphabetical (A-Z)</option>
+                        <option value="alpha-desc">Alphabetical (Z-A)</option>
+                        <option value="plays-desc">Plays (Most)</option>
+                        <option value="plays-asc">Plays (Least)</option>
+                        <option value="category">Category</option>
+                    </select>
+                </label>
+                
+                <label>View Mode:
+                    <select id="view-select" onchange="renderGames()">
+                        <option value="grid">All (Grid)</option>
+                        <option value="categories">Group by Category</option>
+                    </select>
+                </label>
+
+                <label>Filter Tag:
+                    <select id="tag-select" onchange="renderGames()">
+                        <option value="all">All Tags</option>
+                        </select>
+                </label>
+
+                <input type="text" id="game-search" placeholder="Search for Games..." onkeyup="searchGames()">
+            </div>
+
+            <div id="games-container">
+
+            </div>
+        </section>
+
+        <section id="view-movies" class="view-section">
+            <div class="movies-controls controls-bar">
+                <input type="text" id="movie-search" placeholder="Search for TV Shows..." onkeyup="if(event.key === 'Enter') searchMovies()">
+                <button onclick="searchMovies()">Search</button>
+            </div>
+            <div id="movies-container" class="games-grid">
+                </div>
+        </section>
+
+        <section id="view-music" class="view-section">
+            <div class="music-controls controls-bar">
+                <input type="text" id="music-search" placeholder="Search for Music..." onkeyup="if(event.key === 'Enter') searchMusic()">
+                <button onclick="searchMusic()">Search</button>
+            </div>
+            <div id="music-container" class="games-grid">
+            </div>
+        </section>
+
+        <section id="view-ai" class="view-section">
+            <div class="chat-container">
+                <div class="controls-bar" style="justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                    <div style="display: flex; gap: 15px;">
+                        <div style="font-weight: 600;">Session Requests: <span id="session-ai-req" style="color: var(--accent-color);">0</span></div>
+                        <div style="font-weight: 600;">Tokens Used: <span id="session-ai-tokens" style="color: var(--accent-color);">0</span></div>
+                    </div>
+                    <div class="model-select-wrapper" style="position: relative; display: inline-block;">
+                        <select id="model-selector" style="appearance: none; -webkit-appearance: none; -moz-appearance: none; padding: 6px 32px 6px 12px; border-radius: 6px; background: rgba(15, 23, 42, 0.8); color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.15); font-size: 13px; font-family: inherit; font-weight: 500; cursor: pointer; transition: all 0.2s ease; outline: none;" onmouseover="this.style.borderColor='var(--accent-color, #3b82f6)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.15)'" onfocus="this.style.borderColor='var(--accent-color, #3b82f6)'; this.style.boxShadow='0 0 0 2px rgba(59, 130, 246, 0.2)'" onblur="this.style.boxShadow='none'">
+                            <option value="gemini-3.1-flash-lite" style="background: #0f172a; color: #f8fafc;">Gemini 3.1 Flash-Lite</option>
+                            <option value="gemini-3.5-flash-lite" style="background: #0f172a; color: #f8fafc;">Gemini 3.5 Flash-Lite</option>
+                            <option value="gemini-3-flash-preview" style="background: #0f172a; color: #f8fafc;">Gemini 3 Flash-Preview</option>
+                            <option value="gemini-3.5-flash" style="background: #0f172a; color: #f8fafc;">Gemini 3.5 Flash</option>
+                            <option value="gemini-3.6-flash" style="background: #0f172a; color: #f8fafc;">Gemini 3.6 Flash</option>
+                            <option value="gemini-3.7-flash" style="background: #0f172a; color: #f8fafc;">Gemini 3.7 Flash</option>
+                            <option value="gemini-3.8-flash" style="background: #0f172a; color: #f8fafc;">Gemini 3.8 Flash</option>
+                        </select>
+                        <div style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: rgba(255, 255, 255, 0.6); font-size: 10px;">
+                            ▼
+                        </div>
+                    </div>
+                </div>
+                <div id="chat-display" class="chat-display">
+                    <div class="chat-message ai-message">
+                        <div class="avatar">AI</div>
+                        <div class="message-content">Hello! I'm Gemini. Where shall we start?</div>
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="ai-input" placeholder="Message AI..." onkeyup="if(event.key === 'Enter') sendAiMessage()" autocomplete="off">
+                    <button onclick="sendAiMessage()">Send</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-pr0xy" class="view-section">
+            <h2>1000 plays for Pr0xy!</h2>
+        </section>
+    </main>
+
+    <div id="game-modal" class="modal-overlay">
+        <div class="modal-content" id="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modal-game-title">
+                    Game Title
+                </div>
+                <button class="info-btn-transparent" onclick="openAiModal()" title="Quick AI Help">
+                    <img width="25px" height="25px" src="images/.1system/help.png" alt="Help">
+                </button>
+                <div class="modal-stats">
+                    <div id="modal-game-plays">Plays: 0</div>
+                    <div id="modal-game-time">Session: 0s</div>
+                </div>
+                <div class="modal-controls">
+                    <button onclick="toggleFullscreen()">Fullscreen</button>
+                    <button onclick="closeModal()">Close</button>
+                </div>
+            </div>
+            <div class="modal-body" id="modal-game-area">
+                <iframe src="games/.1system/gnf404.html"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div id="ai-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 600px; height: 80vh;">
+            <div class="modal-header">
+                <div class="modal-title">AI Assistant</div>
+                <div class="modal-controls">
+                    <button onclick="closeAiModal()">Close</button>
+                </div>
+            </div>
+            <div class="modal-body" style="background: var(--card-bg); display: flex; flex-direction: column; padding: 0;">
+                <div id="popup-chat-display" class="chat-display" style="flex-grow: 1; padding: 20px;">
+                    <div class="chat-message ai-message">
+                        <div class="avatar">AI</div>
+                        <div class="message-content">Hello! How can I help you?</div>
+                    </div>
+                </div>
+                <div class="chat-input-area" style="border-radius: 0 0 var(--border-radius) var(--border-radius);">
+                    <input type="text" id="popup-ai-input" placeholder="Message AI..." onkeyup="if(event.key === 'Enter') sendPopupAiMessage()" autocomplete="off">
+                    <button onclick="sendPopupAiMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9615585055977146"
+     crossorigin="anonymous"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/eruda/3.4.3/eruda.min.js"></script>
+    <script>eruda.init();</script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>-->
+    <script src="gamesList.js"></script>
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+    //import { GoogleGenAI } from "https://esm.sh/@google/genai";
+
+    //const ai = new GoogleGenAI({ apiKey: ""});
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyChKLyS1RFT1vix8qMa1iiDJ3QV9o_6X30",
+        authDomain: "tgscience26.firebaseapp.com",
+        projectId: "tgscience26",
+        storageBucket: "tgscience26.firebasestorage.app",
+        messagingSenderId: "622574637052",
+        appId: "1:622574637052:web:15ddb3f85d7d1cf8cf6c79",
+        measurementId: "G-FCM6W830GR"
+    };
+
+    let db;
+    let globalPlays = 0;
+    let isFirebaseActive = false;
+    let globalAiRequests = 0;
+    let globalAiTokens = 0;
+    let sessionAiRequests = 0;
+    let sessionAiTokens = 0;
+    let sessionTimeSeconds = 0;
+    let currentGame = "";
+
+    setInterval(() => {
+        sessionTimeSeconds++;
+        const mins = Math.floor(sessionTimeSeconds / 60);
+        const secs = sessionTimeSeconds % 60;
+        const timeEl = document.getElementById('time-on-page-display');
+        if (timeEl) timeEl.innerText = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+    }, 1000);
+
+    try {
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        isFirebaseActive = true;
+    } catch (error) {
+        console.error("Firebase init error:", error);
+    }
+
+    window.switchTab = (tabId) => {
+        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-links button').forEach(el => el.classList.remove('active'));
+        
+        document.getElementById(`view-${tabId}`).classList.add('active');
+        
+        const btn = Array.from(document.querySelectorAll('.nav-links button')).find(b => b.getAttribute('onclick').includes(tabId));
+        if (btn) btn.classList.add('active');
+    };
+
+    window.toggleTheme = () => {
+        const html = document.documentElement;
+        const currentTheme = html.getAttribute('data-theme');
+        html.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+    };
+
+    function populateTags() {
+        const select = document.getElementById("tag-select");
+        if (!select) return;
+        flags.forEach(tag => {
+            const opt = document.createElement("option");
+            opt.value = tag;
+            opt.textContent = tag.charAt(0).toUpperCase() + tag.slice(1);
+            select.appendChild(opt);
+        });
+    }
+
+    async function fetchPlayData() {
+        if (isFirebaseActive) {
+            try {
+                const globalRef = doc(db, "stats", "global");
+                getDoc(globalRef).then(globalSnap => {
+                    if (globalSnap.exists()) {
+                        globalPlays = globalSnap.data().totalPlays || 0;
+                        globalAiRequests = globalSnap.data().totalAiRequests || 0;
+                        globalAiTokens = globalSnap.data().totalAiTokens || 0;
+                    } else {
+                        setDoc(globalRef, { totalPlays: 0, totalAiRequests: 0, totalAiTokens: 0 });
+                    }
+                    updateGlobalPlaysUI();
+                });
+
+                const fetchPromises = gamesList.map(async (game) => {
+                    const gameRef = doc(db, "games", game.id);
+                    const gameSnap = await getDoc(gameRef);
+                    
+                    if (gameSnap.exists()) {
+                        game.plays = gameSnap.data().plays || 0;
+
+                        const playCountEl = document.querySelector(`[data-game-id="${game.id}"] .play-count`);
+                        if (playCountEl) {
+                            playCountEl.innerText = `${game.plays} plays`;
+                        }
+                    }
+                });
+
+                await Promise.all(fetchPromises);
+
+                const sortSelect = document.getElementById('sort-select');
+                if (sortSelect && sortSelect.value.startsWith('plays-')) {
+                    window.renderGames();
+                }
+
+            } catch (error) {
+                console.error("Error fetching Firestore data:", error);
+                loadLocalFallbackData();
+                updateGlobalPlaysUI();
+            }
+        } else {
+            loadLocalFallbackData();
+            updateGlobalPlaysUI();
+        }
+    }
+
+    function loadLocalFallbackData() {
+        globalPlays = parseInt(localStorage.getItem('globalPlays') || '0');
+        gamesList.forEach(game => {
+            game.plays = parseInt(localStorage.getItem(`game_${game.id}_plays`) || '0');
+        });
+    }
+
+    async function recordPlay(gameId) {
+        globalPlays++;
+        const game = gamesList.find(g => g.id === gameId);
+        if (game) game.plays++;
+        
+        updateGlobalPlaysUI();
+        
+        if (isFirebaseActive) {
+            try {
+                const globalRef = doc(db, "stats", "global");
+                await updateDoc(globalRef, { totalPlays: increment(1) });
+                
+                const gameRef = doc(db, "games", gameId);
+                await setDoc(gameRef, { plays: increment(1) }, { merge: true });
+            } catch (error) {
+                console.error("Error writing play to Firestore:", error);
+            }
+        } else {
+            localStorage.setItem('globalPlays', globalPlays);
+            if (game) localStorage.setItem(`game_${game.id}_plays`, game.plays);
+        }
+        
+        window.renderGames();
+    }
+
+    function updateGlobalPlaysUI() {
+        const playEl = document.getElementById('global-plays-display');
+        if (playEl) playEl.innerText = globalPlays.toLocaleString();
+
+        const aiEl = document.getElementById('global-ai-requests-display');
+        if (aiEl) aiEl.innerText = globalAiRequests.toLocaleString();
+
+        const aiTokensEl = document.getElementById('global-ai-tokens-display');
+        if (aiTokensEl) aiTokensEl.innerText = globalAiTokens.toLocaleString();
+    }
+
+    window.renderGames = () => {
+        const container = document.getElementById('games-container');
+        if (!container) return;
+        container.innerHTML = '';
+
+        const sortSelect = document.getElementById('sort-select');
+        const viewSelect = document.getElementById('view-select');
+        const tagSelect = document.getElementById('tag-select');
+        
+        const sortVal = sortSelect ? sortSelect.value : 'alpha';
+        const viewVal = viewSelect ? viewSelect.value : 'grid';
+        const tagVal = tagSelect ? tagSelect.value : 'all';
+
+        let filteredGames = gamesList.filter(g => tagVal === 'all' || (g.tags && g.tags.includes(tagVal)));
+
+        filteredGames.sort((a, b) => {
+            if (sortVal === 'alpha') return a.title.localeCompare(b.title);
+            if (sortVal === 'alpha-desc') return b.title.localeCompare(a.title);
+            if (sortVal === 'plays-desc') return (b.plays || 0) - (a.plays || 0);
+            if (sortVal === 'plays-asc') return (a.plays || 0) - (b.plays || 0);
+            if (sortVal === 'category') return (a.category || '').localeCompare(b.category || '');
+            return 0;
+        });
+
+        if (viewVal === 'categories') {
+            const groups = {};
+            filteredGames.forEach(g => {
+                const cat = g.category || "Uncategorized";
+                if (!groups[cat]) groups[cat] = [];
+                groups[cat].push(g);
+            });
+
+            for (const [category, games] of Object.entries(groups)) {
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'category-group';
+                
+                const header = document.createElement('h3');
+                header.className = 'category-header';
+                header.innerText = category;
+                groupDiv.appendChild(header);
+
+                const gridDiv = document.createElement('div');
+                gridDiv.className = 'games-grid';
+                games.forEach(game => gridDiv.appendChild(createGameCard(game)));
+                
+                groupDiv.appendChild(gridDiv);
+                container.appendChild(groupDiv);
+            }
+        } else {
+            const gridDiv = document.createElement('div');
+            gridDiv.className = 'games-grid';
+            filteredGames.forEach(game => gridDiv.appendChild(createGameCard(game)));
+            container.appendChild(gridDiv);
+        }
+    };
+
+    function createGameCard(game) {
+        const card = document.createElement('div');
+        card.className = 'game-card';
+        card.style.backgroundImage = `url('images/${game.img}')`;
+        card.onclick = () => openModal(game.id);
+
+        const tagsHtml = game.tags.map(t => `<span class="tag-badge">${t}</span>`).join('');
+        card.innerHTML = `
+            <div class="card-tags">${tagsHtml}</div>
+            <div class="card-overlay">
+                <div class="card-title">${game.title}</div>
+                <div class="card-plays">▶ ${game.plays.toLocaleString()} plays</div>
+            </div>
+        `;
+        return card;
+    }
+    
+    async function init() {
+        populateTags();
+        window.renderGames();
+        fetchPlayData();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+    } else {
+        init();
+    }
+    
+    let playtimeInterval;
+    let currentPlaytime = 0;
+
+    window.openModal = (gameId) => {
+        const game = gamesList.find(g => g.id === gameId);
+        if (!game) return;
+
+        currentGame = game.title;
+        let customParams = '';
+        let customFilePath = game.img.replace(".jpg", "");
+        if (game.params != undefined) {
+            if (game.params.includes('|')) {
+                customParams = game.params.split('|')[0];
+                customFilePath = game.params.split('|')[1];
+            } else {
+                customParams = game.params;
+            }
+        }
+        document.getElementById('modal-game-title').innerText = game.title;
+        document.getElementById('modal-game-plays').innerText = `Plays: ${game.plays.toLocaleString()}`;
+        document.getElementById('game-modal').classList.add('active');
+        document.getElementById('modal-game-area').innerHTML = `
+        <iframe src='games/${customFilePath}.html${customParams}'></iframe>
+        `;
+
+        currentPlaytime = 0;
+        updatePlaytimeUI();
+        clearInterval(playtimeInterval);
+        playtimeInterval = setInterval(() => {
+            currentPlaytime++;
+            updatePlaytimeUI();
+        }, 1000);
+
+        recordPlay(gameId);
+    };
+
+    window.closeModal = () => {
+        document.getElementById('game-modal').classList.remove('active');
+        const modalContent = document.getElementById('modal-content');
+        modalContent.querySelector('iframe').src = 'games/.1system/gnf404.html';
+        clearInterval(playtimeInterval);
+        if (document.fullscreenElement) {
+            document.exitFullscreen().catch(err => console.log(err));
+        }
+    };
+
+    window.toggleFullscreen = () => {
+        const modalContent = document.getElementById('modal-content');
+        if (!document.fullscreenElement) {
+            modalContent.requestFullscreen().catch(err => {
+                console.error(`Error attempting to enable fullscreen: ${err.message}`);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    };
+
+    function updatePlaytimeUI() {
+        const mins = Math.floor(currentPlaytime / 60);
+        const secs = currentPlaytime % 60;
+        let timeString = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+        const timeEl = document.getElementById('modal-game-time');
+        if (timeEl) timeEl.innerText = `Session: ${timeString}`;
+    }
+
+    window.searchGames = async (query = null) => {
+        const searchInput = document.getElementById('game-search');
+        const searchTerm = query || (searchInput ? searchInput.value.trim() : '') || '';
+        if (!searchTerm) {
+            window.renderGames();
+            return;
+        }
+
+        const container = document.getElementById('games-container');
+        if (!container) return;
+
+        container.innerHTML = '<p style="text-align:center; width: 100%;">Searching games...</p>';
+
+        const filteredGames = gamesList.filter(game => game.title.toLowerCase().includes(searchTerm.toLowerCase()));
+        
+        container.innerHTML = '';
+        if (filteredGames.length === 0) {
+            container.innerHTML = '<p style="text-align:center; width: 100%;">No games found.</p>';
+            return;
+        }
+
+        const gridDiv = document.createElement('div');
+        gridDiv.className = 'games-grid';
+        filteredGames.forEach(game => gridDiv.appendChild(createGameCard(game)));
+        container.appendChild(gridDiv);
+    }
+
+    window.searchMovies = async (query = null) => {
+        const searchInput = document.getElementById('movie-search');
+        const searchTerm = query || (searchInput ? searchInput.value.trim() : '') || 'popular';
+        const container = document.getElementById('movies-container');
+        if (!container) return;
+        
+        container.innerHTML = '<p style="text-align:center; width: 100%;">Fetching shows...</p>';
+        
+        try {
+            const res = await fetch(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(searchTerm)}`);
+            const data = await res.json();
+            
+            container.innerHTML = '';
+            if(data.length === 0) {
+                container.innerHTML = '<p style="text-align:center; width: 100%;">No shows found.</p>';
+                return;
+            }
+
+            data.forEach(item => {
+                const show = item.show;
+                const imgUrl = show.image ? show.image.medium : 'https://via.placeholder.com/400x400?text=No+Image';
+                
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                card.style.backgroundImage = `url('${imgUrl}')`;
+                
+                const rating = show.rating?.average ? `⭐ ${show.rating.average}` : '⭐ N/A';
+                const genres = show.genres?.slice(0, 2).map(g => `<span class="tag-badge">${g}</span>`).join('') || '';
+
+                card.innerHTML = `
+                    <div class="card-tags">${genres}</div>
+                    <div class="card-overlay">
+                        <div class="card-title">${show.name}</div>
+                        <div class="card-plays">${rating} | ${show.premiered ? show.premiered.split('-')[0] : 'Unknown Year'}</div>
+                    </div>
+                `;
+                
+                card.onclick = () => window.open(show.url, '_blank');
+                container.appendChild(card);
+            });
+        } catch (e) {
+            console.error("Movie fetch error:", e);
+            container.innerHTML = '<p>Error fetching data. Check your connection.</p>';
+        }
+    };
+
+window.searchMusic = async (query = null) => {
+    const searchInput = document.getElementById('music-search');
+    const searchTerm = query || (searchInput ? searchInput.value.trim() : '') || 'electronic';
+    const container = document.getElementById('music-container');
+    if (!container) return;
+    
+    container.innerHTML = '<p style="text-align:center; width: 100%;">Fetching full songs...</p>';
+    
+    try {
+        const res = await fetch(`https://freemusicarchive.org/api/get/tracks.json?api_key=6V5X0MCIPYHXGBWD&search_term=${encodeURIComponent(searchTerm)}&limit=25`);
+        const data = await res.json();
+        
+        container.innerHTML = '';
+        if(!data.dataset || data.dataset.length === 0) {
+            container.innerHTML = '<p style="text-align:center; width: 100%;">No music found.</p>';
+            return;
+        }
+
+        data.dataset.forEach(track => {
+            const imgUrl = track.track_image_file || 'https://via.placeholder.com/400x400?text=No+Image';
+            
+            const card = document.createElement('div');
+            card.className = 'game-card';
+            card.style.backgroundImage = `url('${imgUrl}')`;
+            
+            const artist = track.artist_name || 'Unknown Artist';
+            const trackName = track.track_title || 'Unknown Track';
+            const releaseYear = track.track_date_recorded ? track.track_date_recorded.split('-')[0] : '';
+
+            card.innerHTML = `
+                <div class="card-tags"><span class="tag-badge">Full Song</span></div>
+                <div class="card-overlay">
+                    <div class="card-title">${trackName}</div>
+                    <div class="card-plays">${artist} ${releaseYear ? '| ' + releaseYear : ''}</div>
+                </div>
+            `;
+            
+            card.onclick = () => {
+                if (track.track_file) {
+                    window.open(track.track_file, '_blank');
+                } else if (track.track_url) {
+                    window.open(track.track_url, '_blank');
+                }
+            };
+            
+            container.appendChild(card);
+        });
+    } catch (e) {
+        console.error("Music fetch error:", e);
+        container.innerHTML = '<p>Error fetching data. Check your connection.</p>';
+    }
+};
+
+    let chatSession = null;
+
+window.openAiModal = () => {
+    document.getElementById('ai-modal').classList.add('active');
+};
+
+window.closeAiModal = () => {
+    document.getElementById('ai-modal').classList.remove('active');
+};
+
+window.sendPopupAiMessage = async () => {
+    const input = document.getElementById('popup-ai-input');
+    if (!input) return;
+    const text = input.value.trim();
+    if (!text) return;
+    
+    const display = document.getElementById('popup-chat-display');
+    display.innerHTML += `
+        <div class="chat-message user-message">
+            <div class="message-content">${text}</div>
+        </div>
+    `;
+    input.value = '';
+
+    const aiMessageId = 'popup-ai-msg-' + Date.now();
+    display.innerHTML += `
+        <div class="chat-message ai-message">
+            <div class="avatar">AI</div>
+            <div class="message-content" id="${aiMessageId}">Thinking...</div>
+        </div>
+    `;
+    display.scrollTop = display.scrollHeight;
+
+    try {
+        const chat = getChatSession();
+        const response = await chat.sendMessage({ message: (text + `    |    Context: User is playing the game "${currentGame}"`) });
+        
+        typeOutPopupResponse(response.text, aiMessageId);
+
+        sessionAiRequests++;
+        if (document.getElementById('session-ai-req')) {
+            document.getElementById('session-ai-req').innerText = sessionAiRequests;
+        }
+
+        const tokens = response.usageMetadata?.totalTokenCount || 0;
+        sessionAiTokens += tokens;
+        if (document.getElementById('session-ai-tokens')) {
+            document.getElementById('session-ai-tokens').innerText = sessionAiTokens.toLocaleString();
+        }
+
+        globalAiTokens += tokens;
+        globalAiRequests++;
+        updateGlobalPlaysUI();
+
+        if (isFirebaseActive) {
+            const globalRef = doc(db, "stats", "global");
+            await updateDoc(globalRef, { totalAiRequests: increment(1), totalAiTokens: increment(tokens) });
+        } else {
+            localStorage.setItem('globalAiRequests', globalAiRequests);
+            localStorage.setItem('globalAiTokens', globalAiTokens);
+        }
+    } catch (error) {
+        console.error("Popup AI Error:", error);
+        const errEl = document.getElementById(aiMessageId);
+        if (errEl) errEl.innerText = "Sorry, I encountered an error connecting to the AI.";
+    }
+};
+
+let typeSpeed = 3;
+
+function typeOutPopupResponse(text, elementId) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    let i = 0;
+    let currentRawText = '';
+    marked.setOptions({
+        breaks: true,
+        gfm: true
+    });
+    const interval = setInterval(() => {
+        for (let j = 0; j < typeSpeed && j < text.length - i; j++) {
+            currentRawText += text.charAt(i + j);
+        }
+        el.innerHTML = marked.parse(currentRawText);
+        i += typeSpeed;
+        const display = document.getElementById('popup-chat-display');
+        if (display) display.scrollTop = display.scrollHeight;
+        if (i >= text.length) {
+            clearInterval(interval);
+            el.innerHTML = marked.parse(text);
+        }
+    }, 1);
+}
+
+    function getChatSession() {
+        const selectedModel = document.getElementById('model-selector').value;
+        if (!chatSession || chatSession.currentModel !== selectedModel) {
+            chatSession = ai.chats.create({
+                model: selectedModel
+            });
+            chatSession.currentModel = selectedModel;
+        }
+        return chatSession;
+    }
+
+    window.sendAiMessage = async () => {
+        const input = document.getElementById('ai-input');
+        if (!input) return;
+        const text = input.value.trim();
+        if(!text) return;
+        
+        const display = document.getElementById('chat-display');
+        display.innerHTML += `
+            <div class="chat-message user-message">
+                <div class="message-content">${text}</div>
+            </div>
+        `;
+        input.value = '';
+
+        const aiMessageId = 'ai-msg-' + Date.now();
+        display.innerHTML += `
+            <div class="chat-message ai-message">
+                <div class="avatar">AI</div>
+                <div class="message-content" id="${aiMessageId}">Thinking...</div>
+            </div>
+        `;
+        display.scrollTop = display.scrollHeight;
+
+        try {
+            const chat = getChatSession();
+            const response = await chat.sendMessage({ message: text });
+            typeOutResponse(response.text, aiMessageId);
+
+            sessionAiRequests++;
+            document.getElementById('session-ai-req').innerText = sessionAiRequests;
+
+            const tokens = response.usageMetadata?.totalTokenCount;
+            sessionAiTokens += tokens;
+            document.getElementById('session-ai-tokens').innerText = sessionAiTokens.toLocaleString();
+
+            globalAiTokens += tokens;
+            globalAiRequests++;
+            updateGlobalPlaysUI();
+
+            if (isFirebaseActive) {
+                const globalRef = doc(db, "stats", "global");
+                await updateDoc(globalRef, { totalAiRequests: increment(1), totalAiTokens: increment(tokens) });
+            } else {
+                localStorage.setItem('globalAiRequests', globalAiRequests);
+                localStorage.setItem('globalAiTokens', globalAiTokens);
+            }
+        } catch (error) {
+            console.error("AI Error:", error);
+            const errEl = document.getElementById(aiMessageId);
+            if (errEl) errEl.innerText = "Sorry, I encountered an error connecting to the AI. Try switching to a different model.";
+        }
+    };
+
+    function typeOutResponse(text, elementId) {
+        const el = document.getElementById(elementId);
+        if (!el) return;
+        let i = 0;
+        let currentRawText = '';
+        marked.setOptions({
+            breaks: true,
+            gfm: true
+        });
+        const interval = setInterval(() => {
+            for (let j = 0; j < typeSpeed && j < text.length - i; j++) {
+                currentRawText += text.charAt(i + j);
+            }
+            el.innerHTML = marked.parse(currentRawText);
+            i += typeSpeed;
+            const display = document.getElementById('chat-display');
+            if (display) display.scrollTop = display.scrollHeight;
+            if (i >= text.length) {
+                clearInterval(interval);
+                el.innerHTML = marked.parse(text);
+            }
+        }, 1);
+    }
+</script>
+</body>
+</html>
