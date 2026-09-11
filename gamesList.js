@@ -9,29 +9,26 @@ const gamesList = [
     { id: "tgse26gsd-cedoge", title: "Chrome Dino Game", img: "cedoge.jpg", category: "", tags: ["100% working"], plays: 0 },
 
     //Random
-    { id: "tgse26gsd-bkstre", title: "Buckshot Roulette", img: "random/bkstre.jpg", params: "|random/bkstre/index", category: "", tags: ["100% working"], plays: 0 },
-    { id: "tgse26gsd-bntk", title: "Bergentruck 201X", img: "random/bntk.jpg", params: "|random/bntk/BERGENTRUCK_201X", category: "", tags: ["100% working"], plays: 0 },
-    { id: "tgse26gsd-ueyw", title: "Undertale Yellow", img: "random/ueyw.jpg", params: "|random/ueyw/index", category: "", tags: ["100% working"], plays: 0 },
     { id: "tgse26gsd-wbfg", title: "Web Fishing", img: "random/wbfg.jpg", params: "|random/wbfg/index", category: "", tags: ["100% working"], plays: 0 },
 
     //Unity WebGL
     { id: "tgse26gsd-crpt", title: "Clover Pit", img: "unitywgl/crpt.jpg", params: "?game=unitywgl/crpt|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
-    //{ id: "tgse26gsd-gyto", title: "Granny 2", img: "unitywgl/gyto.jpg", params: "?game=unitywgl/gyto|.1system/unity/indexold", category: "", tags: ["100% working"], plays: 0 },
+    { id: "tgse26gsd-gyto", title: "Granny 2", img: "unitywgl/gyto.jpg", params: "?game=unitywgl/gyto|.1system/unity/indexold", category: "", tags: ["100% working"], plays: 0 },
     { id: "tgse26gsd-fgga", title: "Flying Gorilla", img: "unitywgl/fgga.jpg", params: "?game=unitywgl/fgga|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
     { id: "tgse26gsd-inlg", title: "Iron Lung", img: "unitywgl/inlg.jpg", params: "?game=unitywgl/inlg|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
     { id: "tgse26gsd-udgege", title: "Untitled Goose Game", img: "unitywgl/udgege.jpg", params: "?game=unitywgl/udgege|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
     { id: "tgse26gsd-aatear", title: "Amanda The Adventurer", img: "unitywgl/aatear.jpg", params: "?game=unitywgl/aatear|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
     { id: "tgse26gsd-fh", title: "Fish", img: "unitywgl/fh.jpg", params: "?game=unitywgl/fh|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
-    //{ id: "tgse26gsd-fstofm", title: "Fears To Fathom: Home Alone", img: "unitywgl/fstofm.jpg", params: "?game=unitywgl/fstofm|.1system/unity/indexold", category: "", tags: ["100% working"], plays: 0 },
+    { id: "tgse26gsd-fstofm", title: "Fears To Fathom: Home Alone", img: "unitywgl/fstofm.jpg", params: "?game=unitywgl/fstofm|.1system/unity/indexold", category: "", tags: ["100% working"], plays: 0 },
     { id: "tgse26gsd-ggorit", title: "Getting Over It", img: "unitywgl/ggorit.jpg", params: "?game=unitywgl/ggorit|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
-    { id: "tgse26gsd-mkmnkn", title: "Milkman Karlson", img: "unitywgl/mkmnkn.jpg", params: "?game=unitywgl/mkmnkn|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
+    { id: "tgse26gsd-mkmnkn", title: "Milkman Karlson", img: "unitywgl/mkmnkn.jpg", params: "?game=unitywgl/mkmnkn|.1system/unity/indexold", category: "", tags: ["100% working"], plays: 0 },
     { id: "tgse26gsd-pepygd", title: "People Playground", img: "unitywgl/pepygd.jpg", params: "?game=unitywgl/pepygd|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
-    //{ id: "tgse26gsd-rt", title: "Raft", img: "unitywgl/rt.jpg", params: "?game=unitywgl/rt|.1system/unity/indexold", category: "", tags: ["100% working"], plays: 0 },
+    { id: "tgse26gsd-rt", title: "Raft", img: "unitywgl/rt.jpg", params: "?game=unitywgl/rt|.1system/unity/indexold", category: "", tags: ["100% working"], plays: 0 },
     { id: "tgse26gsd-sdss", title: "Speed Starts", img: "unitywgl/sdss.jpg", params: "?game=unitywgl/sdss|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
     { id: "tgse26gsd-slbyrnay", title: "Schoolboy Runaway", img: "unitywgl/slbyrnay.jpg", params: "?game=unitywgl/slbyrnay|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
     { id: "tgse26gsd-statmdnt", title: "Shift At Midnight", img: "unitywgl/statmdnt.jpg", params: "?game=unitywgl/statmdnt|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
     { id: "tgse26gsd-temninteww", title: "The Man In The Window", img: "unitywgl/temninteww.jpg", params: "?game=unitywgl/temninteww|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
-    //{ id: "tgse26gsd-tetl", title: "Tattle Tail", img: "unitywgl/tetl.jpg", params: "?game=unitywgl/tetl|.1system/unity/indexold", category: "", tags: ["100% working"], plays: 0 },
+    { id: "tgse26gsd-tetl", title: "Tattle Tail", img: "unitywgl/tetl.jpg", params: "?game=unitywgl/tetl|.1system/unity/indexold", category: "", tags: ["100% working"], plays: 0 },
     { id: "tgse26gsd-uakl", title: "Ultrakill", img: "unitywgl/uakl.jpg", params: "?game=unitywgl/uakl|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
 
     //Unorganized
