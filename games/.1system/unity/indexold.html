@@ -20,16 +20,35 @@
       height: 100vh;
     }
 
+    #legacy-header {
+      position: absolute;
+      top: 15px;
+      width: 100%;
+      text-align: center;
+      z-index: 10;
+      font-family: Arial, sans-serif;
+      pointer-events: none;
+    }
+
+    .legacy-tag {
+      display: inline-block;
+      background: #ff9800;
+      color: #000;
+      font-size: 12px;
+      font-weight: 900;
+      padding: 3px 8px;
+      border-radius: 4px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      box-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
+    }
+
     #loading-text {
       font-weight: bold;
-      font-size: 44px;
-      font-family: cursive, sans-serif;
-      text-align: center;
-      margin-top: 20px;
-      position: absolute;
-      width: 100%;
-      top: 20px;
-      z-index: 10;
+      font-size: 32px;
+      font-family: 'Courier New', Courier, monospace, sans-serif;
+      text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.9);
       background: linear-gradient(
         270deg,
         #ff0000,
@@ -46,6 +65,14 @@
       animation: rainbow 3s ease infinite;
     }
 
+    #loading-status-sub {
+      color: #ffffff;
+      opacity: 0.85;
+      font-size: 14px;
+      margin-top: 6px;
+      font-family: Arial, sans-serif;
+    }
+
     @keyframes rainbow {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
@@ -55,166 +82,353 @@
 </head>
 
 <body>
-  <div id="loading-text">FETCHING DATA (Wait a minute before clicking off)</div>
+  <div id="legacy-header">
+    <div class="legacy-tag">⚡ Legacy UnityLoader Active ⚡</div>
+    <div id="loading-text">INITIALIZING...</div>
+    <div id="loading-status-sub">Current Part: 0.00 MB / 0.00 MB | Total: 0.00 MB / 0.00 MB</div>
+  </div>
+  
   <div id="unityContainer"></div>
 
-  <script>
-    var loadingText = document.querySelector("#loading-text");
+<script>
+  var loadingText = document.querySelector("#loading-text");
+  var loadingSubText = document.querySelector("#loading-status-sub");
 
-    var urlParams = new URLSearchParams(window.location.search);
-    var gameParam = urlParams.get('game');
+  var urlParams = new URLSearchParams(window.location.search);
+  var gameParam = urlParams.get('game');
 
-    if (!gameParam) {
-      alert("No game specified in URL query (?game=path/to/folder)");
+  if (!gameParam) {
+    alert("No game specified in URL query (?game=path/to/folder)");
+  }
+
+  var baseFolderUrl = new URL("../../" + gameParam + "/", window.location.href).href;
+  if (!baseFolderUrl.endsWith("/")) baseFolderUrl += "/";
+
+  function formatMB(bytes) {
+    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+  }
+
+  async function scanFileParts(basePath) {
+    let parts = [];
+    let startIdx = 0;
+
+    let testRes = await fetch(`${basePath}.part0`, { method: 'HEAD' }).catch(() => null);
+    if (!testRes || !testRes.ok) {
+      testRes = await fetch(`${basePath}.part1`, { method: 'HEAD' }).catch(() => null);
+      if (testRes && testRes.ok) {
+        startIdx = 1;
+      } else {
+        return parts;
+      }
     }
 
-    var buildUrl = "../../" + gameParam;
-    var gameFolderName = gameParam ? gameParam.split('/').pop() : "Unity Game";
+    let idx = startIdx;
+    while (true) {
+      const url = `${basePath}.part${idx}`;
+      try {
+        const res = await fetch(url, { method: 'HEAD' });
+        if (!res.ok) break;
 
-    async function fetchAndMergeParts(baseUrl, mimeType) {
-      const buffers = [];
-      let partIndex = 1;
-
-      let testResponse = await fetch(`${baseUrl}.part0`, { method: 'HEAD' }).catch(() => null);
-        if (!testResponse || !testResponse.ok) {
-          testResponse = await fetch(`${baseUrl}.part1`, { method: 'HEAD' }).catch(() => null);
-          if (testResponse && testResponse.ok) {
-            partIndex = 1;
-          }
-        }
-
-        while (true) {
-          const partUrl = `${baseUrl}.part${partIndex}`;
-          try {
-            const response = await fetch(partUrl);
-            if (!response.ok) {
-              break;
-            }
-            const data = await response.arrayBuffer();
-            buffers.push(data);
-            partIndex++;
-          } catch (err) {
-            break;
-          }
-        }
-
-        if (buffers.length === 0) {
-          throw new Error(`Failed to load any valid part files for ${baseUrl}`);
-        }
-
-        const totalLength = buffers.reduce((sum, buf) => sum + buf.byteLength, 0);
-        const combined = new Uint8Array(totalLength);
-        let offset = 0;
-        for (const buf of buffers) {
-          combined.set(new Uint8Array(buf), offset);
-          offset += buf.byteLength;
-        }
-
-        return new Blob([combined], { type: mimeType });
+        const size = parseInt(res.headers.get('content-length') || '0', 10);
+        parts.push({
+          url: url,
+          name: `${basePath.split('/').pop()}.part${idx}`,
+          size: size
+        });
+        idx++;
+      } catch (e) {
+        break;
+      }
     }
 
-    function installNetworkInterceptors(redirects) {
-      function resolveRedirect(url) {
-        const value = typeof url === 'string' ? url : (url && url.url) || String(url || '');
-        return redirects.find((item) => value.endsWith(item.name)) || null;
+    return parts;
+  }
+
+  let grandTotalBytes = 0;
+  let grandLoadedBytes = 0;
+  let totalPartsCount = 0;
+  let currentPartGlobalIndex = 1;
+
+  async function decompressIfNeeded(buffer) {
+    const arr = new Uint8Array(buffer);
+    if (arr.length > 2 && arr[0] === 0x1f && arr[1] === 0x8b) {
+      try {
+        const stream = new Blob([buffer]).stream().pipeThrough(new DecompressionStream('gzip'));
+        return await new Response(stream).arrayBuffer();
+      } catch (e) {
+        console.warn("Gzip header detected but native decompression failed:", e);
+      }
+    }
+    return buffer;
+  }
+
+  async function fetchAndMergeParts(baseUrl, mimeType, labelName, scannedParts) {
+    if (!scannedParts || scannedParts.length === 0) return null;
+
+    const buffers = [];
+
+    for (let i = 0; i < scannedParts.length; i++) {
+      const part = scannedParts[i];
+      const partFileName = part.name;
+      const partUrl = part.url;
+      
+      let response;
+      try {
+        response = await fetch(partUrl);
+        if (!response.ok) break;
+      } catch (err) {
+        break;
       }
 
-      const originalFetch = window.fetch.bind(window);
-      window.fetch = function (input, init) {
-        const match = resolveRedirect(input);
-        if (match) {
-          return originalFetch(match.url, init);
-        }
-        return originalFetch(input, init);
-      };
+      loadingText.innerText = `FETCHING ${labelName.toUpperCase()} (${currentPartGlobalIndex}/${totalPartsCount})`;
 
-      const originalOpen = XMLHttpRequest.prototype.open;
-      XMLHttpRequest.prototype.open = function (method, url, ...rest) {
-        const match = resolveRedirect(url);
-        return originalOpen.call(this, method, match ? match.url : url, ...rest);
-      };
+      const contentLength = response.headers.get('content-length');
+      const totalBytes = contentLength ? parseInt(contentLength, 10) : part.size;
+      let loadedBytes = 0;
+
+      const reader = response.body.getReader();
+      const chunks = [];
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        chunks.push(value);
+        loadedBytes += value.byteLength;
+        grandLoadedBytes += value.byteLength;
+
+        loadingSubText.innerText = `Part (${partFileName}): ${formatMB(loadedBytes)} / ${totalBytes ? formatMB(totalBytes) : 'Unknown'} | Total: ${formatMB(grandLoadedBytes)} / ${grandTotalBytes ? formatMB(grandTotalBytes) : 'Unknown'}`;
+      }
+
+      const partBuffer = new Uint8Array(loadedBytes);
+      let offset = 0;
+      for (const chunk of chunks) {
+        partBuffer.set(chunk, offset);
+        offset += chunk.length;
+      }
+
+      buffers.push(partBuffer.buffer);
+      currentPartGlobalIndex++;
     }
 
-    function loadLegacyLoaderScript() {
-      return new Promise((resolve, reject) => {
-        var loaderScript = document.createElement("script");
-        loaderScript.src = buildUrl + "/unity.loader.js"; 
-        loaderScript.onload = resolve;
-        loaderScript.onerror = () => {
-          var altScript = document.createElement("script");
-          altScript.src = buildUrl + "/UnityLoader.js";
-          altScript.onload = resolve;
-          altScript.onerror = reject;
-          document.head.appendChild(altScript);
-        };
-        document.head.appendChild(loaderScript);
-      });
+    if (buffers.length === 0) return null;
+
+    const totalLength = buffers.reduce((sum, buf) => sum + buf.byteLength, 0);
+    const combined = new Uint8Array(totalLength);
+    let offset = 0;
+    for (const buf of buffers) {
+      combined.set(new Uint8Array(buf), offset);
+      offset += buf.byteLength;
     }
 
-    (async () => {
+    const decompressedBuffer = await decompressIfNeeded(combined.buffer);
+    return new Blob([decompressedBuffer], { type: mimeType });
+  }
+
+  function installNetworkInterceptors(redirects, baseUrl) {
+    function resolveUrl(urlStr) {
+      if (!urlStr || typeof urlStr !== 'string') return urlStr;
+
+      const match = redirects.find(item => item.url && (urlStr.includes(item.name) || urlStr.endsWith(item.name)));
+      if (match) return match.url;
+
+      if (urlStr.includes('/undefined') || (!urlStr.startsWith('http') && !urlStr.startsWith('blob:'))) {
+        const cleanFileName = urlStr.split('/').pop();
+        return baseUrl + cleanFileName;
+      }
+
+      return urlStr;
+    }
+
+    // Intercept Fetch & prevent 404 HTML responses from crashing binary decoders
+    const originalFetch = window.fetch.bind(window);
+    window.fetch = async function (input, init) {
+      const urlStr = typeof input === 'string' ? input : (input && input.url) || '';
+      const targetUrl = resolveUrl(urlStr);
       try {
-        const [dataBlob, wasmBlob] = await Promise.all([
-          fetchAndMergeParts(buildUrl + "/build.data", "application/octet-stream"),
-          fetchAndMergeParts(buildUrl + "/build.wasm", "application/wasm")
-        ]);
+        const res = await originalFetch(targetUrl, init);
+        if (!res.ok && (targetUrl.endsWith('.jpg') || targetUrl.endsWith('.png') || targetUrl.endsWith('.json'))) {
+          // Return an empty valid 200 response for missing assets so Unity won't abort
+          return new Response(new Uint8Array(), { status: 200, headers: { 'Content-Type': 'image/jpeg' } });
+        }
+        return res;
+      } catch (e) {
+        return originalFetch(targetUrl, init);
+      }
+    };
 
-        const dataBlobUrl = URL.createObjectURL(dataBlob);
-        const wasmBlobUrl = URL.createObjectURL(wasmBlob);
+    const originalOpen = XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open = function (method, url, ...rest) {
+      return originalOpen.call(this, method, resolveUrl(String(url || '')), ...rest);
+    };
 
-        installNetworkInterceptors([
-          { name: 'build.data', url: dataBlobUrl },
-          { name: 'build.wasm', url: wasmBlobUrl }
-        ]);
+    const originalCreateElement = document.createElement.bind(document);
+    document.createElement = function (tagName, options) {
+      const element = originalCreateElement(tagName, options);
+      if (tagName.toLowerCase() === 'script') {
+        const originalSrcDescriptor = Object.getOwnPropertyDescriptor(HTMLScriptElement.prototype, 'src');
+        Object.defineProperty(element, 'src', {
+          get: function () {
+            return originalSrcDescriptor.get.call(this);
+          },
+          set: function (value) {
+            originalSrcDescriptor.set.call(this, resolveUrl(String(value || '')));
+          },
+          configurable: true,
+          enumerable: true
+        });
+      }
+      return element;
+    };
 
-        await loadLegacyLoaderScript();
+    const NativeWorker = window.Worker;
+    window.Worker = function (scriptURL, options) {
+      var targetUrl = resolveUrl(String(scriptURL));
+      return new NativeWorker(targetUrl, options);
+    };
+  }
 
-        var jsonUrl = buildUrl + "/" + gameFolderName + ".json";
-        
-        let totalBytes = dataBlob.size || 0;
-        const totalMB = totalBytes ? (totalBytes / (1024 * 1024)).toFixed(1) : null;
+  function loadLegacyLoaderScript() {
+    return new Promise((resolve, reject) => {
+      var loaderScript = document.createElement("script");
+      loaderScript.src = baseFolderUrl + "UnityLoader.js"; 
+      loaderScript.onload = resolve;
+      loaderScript.onerror = () => {
+        var altScript = document.createElement("script");
+        altScript.src = baseFolderUrl + "unity.loader.js";
+        altScript.onload = resolve;
+        altScript.onerror = reject;
+        document.head.appendChild(altScript);
+      };
+      document.head.appendChild(loaderScript);
+    });
+  }
 
-        if (typeof UnityLoader !== "undefined") {
-          var unityInstance = UnityLoader.instantiate(
-            "unityContainer",
-            jsonUrl,
-            {
-              Module: {
-                locateFile: function(url) {
-                  if (url.indexOf("build.wasm") !== -1 || url.indexOf(".wasm") !== -1) {
-                    return buildUrl + "/build.wasm";
-                  }
-                  if (url.indexOf("build.framework.js") !== -1) {
-                    return buildUrl + "/build.framework.js";
-                  }
-                  return url;
-                }
-              },
-              onProgress: function(instance, progress) {
-                let pct = Math.round(progress * 100);
+  (async () => {
+    try {
+      loadingText.innerText = "SCANNING FILES...";
 
-                if (loadingText) {
-                  if (totalMB) {
-                    let currentMB = (totalMB * progress).toFixed(1);
-                    loadingText.textContent = `LOADING... ${currentMB} MB / ${totalMB} MB (${pct}%)`;
-                  } else {
-                    loadingText.textContent = `LOADING... ${pct}%`;
-                  }
+      // Also scan for optional framework script parts
+      const [dataParts, wasmParts, frameworkParts] = await Promise.all([
+        scanFileParts(baseFolderUrl + "build.data"),
+        scanFileParts(baseFolderUrl + "build.wasm"),
+        scanFileParts(baseFolderUrl + "build.framework.js")
+      ]);
 
-                  if (progress === 1) {
-                    loadingText.remove();
-                  }
+      const allParts = [...dataParts, ...wasmParts, ...frameworkParts];
+      totalPartsCount = allParts.length;
+      grandTotalBytes = allParts.reduce((sum, p) => sum + p.size, 0);
+
+      const dataBlob = await fetchAndMergeParts(baseFolderUrl + "build.data", "application/octet-stream", "Game Data", dataParts);
+      const wasmBlob = await fetchAndMergeParts(baseFolderUrl + "build.wasm", "application/wasm", "Engine Code", wasmParts);
+      const frameworkBlob = await fetchAndMergeParts(baseFolderUrl + "build.framework.js", "application/javascript", "Framework", frameworkParts);
+
+      const dataBlobUrl = dataBlob ? URL.createObjectURL(dataBlob) : null;
+      const wasmBlobUrl = wasmBlob ? URL.createObjectURL(wasmBlob) : null;
+      const frameworkBlobUrl = frameworkBlob ? URL.createObjectURL(frameworkBlob) : null;
+
+      installNetworkInterceptors([
+        { name: 'build.data', url: dataBlobUrl },
+        { name: 'build.wasm', url: wasmBlobUrl },
+        { name: 'build.framework.js', url: frameworkBlobUrl },
+        { name: '.data', url: dataBlobUrl },
+        { name: '.wasm', url: wasmBlobUrl }
+      ], baseFolderUrl);
+
+      loadingText.innerText = "PREPARING LEGACY ENGINE...";
+      loadingSubText.innerText = "";
+      
+      await loadLegacyLoaderScript();
+
+      var patchedJsonBlobUrl = baseFolderUrl + "build.json";
+      try {
+        const jsonRes = await fetch(baseFolderUrl + "build.json");
+        if (jsonRes.ok) {
+          const jsonConfig = await jsonRes.json();
+
+          const requiredKeys = [
+            'dataUrl', 'wasmCodeUrl', 'wasmFrameworkUrl', 
+            'asmCodeUrl', 'asmFrameworkUrl', 'codeUrl', 
+            'frameworkUrl', 'memoryUrl'
+          ];
+
+          for (let key in jsonConfig) {
+            if (typeof jsonConfig[key] === 'string' && !jsonConfig[key].startsWith('http') && !jsonConfig[key].startsWith('blob:')) {
+              jsonConfig[key] = baseFolderUrl + jsonConfig[key].replace(/^\//, '');
+            }
+          }
+
+          if (dataBlobUrl) jsonConfig.dataUrl = dataBlobUrl;
+          if (wasmBlobUrl) {
+            jsonConfig.wasmCodeUrl = wasmBlobUrl;
+            jsonConfig.codeUrl = wasmBlobUrl;
+          }
+          if (frameworkBlobUrl) {
+            jsonConfig.wasmFrameworkUrl = frameworkBlobUrl;
+            jsonConfig.frameworkUrl = frameworkBlobUrl;
+          }
+
+          requiredKeys.forEach(k => {
+            if (typeof jsonConfig[k] === 'undefined' || jsonConfig[k] === null) {
+              jsonConfig[k] = "";
+            }
+          });
+
+          // Disable all engine-side decompression flags since blobs are pre-decompressed
+          jsonConfig.decompressionFallback = "disabled";
+          delete jsonConfig.unitywebUrl;
+
+          const jsonBlob = new Blob([JSON.stringify(jsonConfig)], { type: 'application/json' });
+          patchedJsonBlobUrl = URL.createObjectURL(jsonBlob);
+        }
+      } catch (e) {
+        console.warn("Unable to pre-patch build.json, falling back to network interceptors.", e);
+      }
+
+      if (typeof UnityLoader !== "undefined") {
+        UnityLoader.locateFile = function(url) {
+          if (url.includes("build.wasm") || url.endsWith(".wasm")) return wasmBlobUrl || url;
+          if (url.includes("build.data") || url.endsWith(".data")) return dataBlobUrl || url;
+          if (url.includes("framework") && frameworkBlobUrl) return frameworkBlobUrl;
+          if (!url.startsWith("http") && !url.startsWith("blob:")) return baseFolderUrl + url;
+          return url;
+        };
+
+        var unityInstance = UnityLoader.instantiate(
+          "unityContainer",
+          patchedJsonBlobUrl,
+          {
+            Module: {
+              locateFile: UnityLoader.locateFile,
+              print: console.log,
+              printErr: console.error
+            },
+            onProgress: function(instance, progress) {
+              let pct = Math.round(progress * 100);
+
+              if (loadingText) {
+                loadingText.textContent = `COMPILING ENGINE... (${pct}%)`;
+                loadingSubText.textContent = `Initializing Legacy WebGL Runtime`;
+
+                if (progress === 1 || progress >= 0.99) {
+                  setTimeout(() => {
+                    document.querySelector("#legacy-header").style.display = "none";
+                  }, 1000);
                 }
               }
             }
-          );
-        } else {
-          alert("UnityLoader is undefined. Ensure unity.loader.js or UnityLoader.js exists in the game directory.");
-        }
-
-      } catch (err) {
-        console.error("Failed to load game:", err);
+          }
+        );
+      } else {
+        alert("UnityLoader is undefined. Ensure UnityLoader.js or unity.loader.js exists in the target directory.");
       }
-    })();
-  </script>
+
+    } catch (err) {
+      console.error("Failed to load game:", err);
+      loadingText.textContent = "ERROR LOADING GAME";
+      loadingSubText.textContent = err.message;
+    }
+  })();
+</script>
 </body>
 </html>

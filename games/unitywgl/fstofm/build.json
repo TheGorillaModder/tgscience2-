@@ -1,9 +1,9 @@
 {
 "companyName": "Rayll",
 "productName": "Fears To Fathom",
-"dataUrl": "FTFHAPort.data.unityweb",
-"wasmCodeUrl": "FTFHAPort.wasm.code.unityweb",
-"wasmFrameworkUrl": "FTFHAPort.wasm.framework.unityweb",
+"dataUrl": "build.data",
+"wasmCodeUrl": "build.wasm",
+"wasmFrameworkUrl": "build.framework.js",
 "TOTAL_MEMORY": 536870912,
 "graphicsAPI": ["WebGL 2.0", "WebGL 1.0"],
 "webglContextAttributes": {"preserveDrawingBuffer": false},

@@ -19,11 +19,68 @@
         width: 100%;
         height: 100%;
         position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
       #unity-canvas {
         width: 100% !important;
         height: 100% !important;
         background: #000;
+      }
+      #unity-loading-bar {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+      }
+      #unity-logo {
+        width: 154px;
+        height: 130px;
+        background: url('TemplateData/unity-logo-dark.png') no-repeat center;
+        background-size: contain;
+        margin-bottom: 20px;
+      }
+      #unity-progress-bar-empty {
+        width: 300px;
+        height: 18px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        border-radius: 10px;
+        padding: 2px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+      }
+      #unity-progress-bar-full {
+        width: 0%;
+        height: 100%;
+        background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+        border-radius: 6px;
+        transition: width 0.1s linear;
+      }
+      #loading-status-container {
+        color: #ffffff;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        text-align: center;
+        margin-top: 14px;
+        text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.9);
+      }
+      #loading-status-part {
+        font-weight: bold;
+        margin-bottom: 4px;
+        letter-spacing: 0.5px;
+      }
+      #loading-status-bytes,
+      #loading-status-total {
+        opacity: 0.85;
+        font-size: 13px;
+        margin-top: 2px;
       }
     </style>
   </head>
@@ -35,6 +92,11 @@
         <div id="unity-progress-bar-empty">
           <div id="unity-progress-bar-full"></div>
         </div>
+        <div id="loading-status-container">
+          <div id="loading-status-part">Discovering files...</div>
+          <div id="loading-status-bytes">Current Part: 0.00 MB / 0.00 MB</div>
+          <div id="loading-status-total">Total Loaded: 0.00 MB / 0.00 MB</div>
+        </div>
       </div>
       <div id="unity-warning"></div>
     </div>
@@ -44,6 +106,10 @@
       var loadingBar = document.querySelector("#unity-loading-bar");
       var progressBarFull = document.querySelector("#unity-progress-bar-full");
       var warningBanner = document.querySelector("#unity-warning");
+      
+      var statusPartText = document.querySelector("#loading-status-part");
+      var statusBytesText = document.querySelector("#loading-status-bytes");
+      var statusTotalText = document.querySelector("#loading-status-total");
 
       function unityShowBanner(msg, type) {
         function updateBannerVisibility() {
@@ -72,31 +138,102 @@
 
       var buildUrl = "../../" + gameParam;
 
-      async function fetchAndMergeParts(baseUrl, mimeType) {
-        const buffers = [];
-        let partIndex = 1;
+      function formatMB(bytes) {
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      }
 
-        let testResponse = await fetch(`${baseUrl}.part0`, { method: 'HEAD' }).catch(() => null);
-        if (!testResponse || !testResponse.ok) {
-          testResponse = await fetch(`${baseUrl}.part1`, { method: 'HEAD' }).catch(() => null);
-          if (testResponse && testResponse.ok) {
-            partIndex = 1;
+      async function scanFileParts(basePath) {
+        let parts = [];
+        let startIdx = 0;
+
+        let testRes = await fetch(`${basePath}.part0`, { method: 'HEAD' }).catch(() => null);
+        if (!testRes || !testRes.ok) {
+          testRes = await fetch(`${basePath}.part1`, { method: 'HEAD' }).catch(() => null);
+          if (testRes && testRes.ok) {
+            startIdx = 1;
+          } else {
+            return parts;
           }
         }
 
+        let idx = startIdx;
         while (true) {
-          const partUrl = `${baseUrl}.part${partIndex}`;
+          const url = `${basePath}.part${idx}`;
           try {
-            const response = await fetch(partUrl);
-            if (!response.ok) {
-              break;
-            }
-            const data = await response.arrayBuffer();
-            buffers.push(data);
-            partIndex++;
+            const res = await fetch(url, { method: 'HEAD' });
+            if (!res.ok) break;
+
+            const size = parseInt(res.headers.get('content-length') || '0', 10);
+            parts.push({
+              url: url,
+              name: `${basePath.split('/').pop()}.part${idx}`,
+              size: size
+            });
+            idx++;
+          } catch (e) {
+            break;
+          }
+        }
+
+        return parts;
+      }
+
+      let grandTotalBytes = 0;
+      let grandLoadedBytes = 0;
+      let totalPartsCount = 0;
+      let currentPartGlobalIndex = 1;
+
+      async function fetchAndMergeParts(baseUrl, mimeType, labelName, scannedParts) {
+        const buffers = [];
+
+        for (let i = 0; i < scannedParts.length; i++) {
+          const part = scannedParts[i];
+          const partFileName = part.name;
+          const partUrl = part.url;
+          
+          let response;
+          try {
+            response = await fetch(partUrl);
+            if (!response.ok) break;
           } catch (err) {
             break;
           }
+
+          statusPartText.innerText = `Loading Part ${currentPartGlobalIndex} of ${totalPartsCount} (${labelName} - ${partFileName})`;
+
+          const contentLength = response.headers.get('content-length');
+          const totalBytes = contentLength ? parseInt(contentLength, 10) : part.size;
+          let loadedBytes = 0;
+
+          const reader = response.body.getReader();
+          const chunks = [];
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            chunks.push(value);
+            loadedBytes += value.byteLength;
+            grandLoadedBytes += value.byteLength;
+
+            if (grandTotalBytes > 0) {
+              const pct = (grandLoadedBytes / grandTotalBytes) * 100;
+              progressBarFull.style.width = Math.min(pct, 100) + "%";
+            }
+
+            statusBytesText.innerText = `Current Part: ${formatMB(loadedBytes)} / ${totalBytes ? formatMB(totalBytes) : 'Unknown'}`;
+            statusTotalText.innerText = `Total Loaded: ${formatMB(grandLoadedBytes)} / ${grandTotalBytes ? formatMB(grandTotalBytes) : 'Unknown'}`;
+          }
+
+          const partBuffer = new Uint8Array(loadedBytes);
+          let offset = 0;
+          for (const chunk of chunks) {
+            partBuffer.set(chunk, offset);
+            offset += chunk.length;
+          }
+
+          buffers.push(partBuffer.buffer);
+          currentPartGlobalIndex++;
         }
 
         if (buffers.length === 0) {
@@ -114,14 +251,31 @@
         return new Blob([combined], { type: mimeType });
       }
 
-      loadingBar.style.display = "block";
+      loadingBar.style.display = "flex";
 
       async function main() {
         try {
-          const [dataBlob, wasmBlob] = await Promise.all([
-            fetchAndMergeParts(buildUrl + "/build.data", "application/octet-stream"),
-            fetchAndMergeParts(buildUrl + "/build.wasm", "application/wasm")
+          statusPartText.innerText = "Scanning part files...";
+          
+          const [dataParts, wasmParts] = await Promise.all([
+            scanFileParts(buildUrl + "/build.data"),
+            scanFileParts(buildUrl + "/build.wasm")
           ]);
+
+          const allParts = [...dataParts, ...wasmParts];
+          totalPartsCount = allParts.length;
+          grandTotalBytes = allParts.reduce((sum, p) => sum + p.size, 0);
+
+          if (totalPartsCount === 0) {
+            throw new Error(`Failed to load any valid part files for ${buildUrl}`);
+          }
+
+          const dataBlob = await fetchAndMergeParts(buildUrl + "/build.data", "application/octet-stream", "Game Data", dataParts);
+          const wasmBlob = await fetchAndMergeParts(buildUrl + "/build.wasm", "application/wasm", "Engine Code", wasmParts);
+
+          statusPartText.innerText = "Initializing Unity engine...";
+          statusBytesText.innerText = "";
+          statusTotalText.innerText = "";
 
           const dataBlobUrl = URL.createObjectURL(dataBlob);
           const wasmBlobUrl = URL.createObjectURL(wasmBlob);
