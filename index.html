@@ -513,7 +513,7 @@
                     Game Title
                 </div>
                 <button class="info-btn-transparent" onclick="openAiModal()" title="Quick AI Help">
-                    <img width="25px" height="25px" src="images/.1system/help.png" alt="Help">
+                    <!--<img width="25px" height="25px" src="images/.1system/help.png" alt="Help">-->
                 </button>
                 <div class="modal-stats">
                     <div id="modal-game-plays">Plays: 0</div>
@@ -914,7 +914,7 @@
 
             data.forEach(item => {
                 const show = item.show;
-                const imgUrl = show.image ? show.image.medium : 'https://via.placeholder.com/400x400?text=No+Image';
+                const imgUrl = show.image ? show.image.medium : 'images/.1system/noImage.jpg';
                 
                 const card = document.createElement('div');
                 card.className = 'game-card';
