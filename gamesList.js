@@ -1,9 +1,6 @@
 const flags = ["100% working", "18+"];
 
 const gamesList = [
-    //18+
-    { id: "tgse26gsd-btbr", title: "Beat Banger", img: "random/btbr.jpg", category: "", params: "|random/btbr/index", tags: ["18+"], plays: 0 },
-
     //Organized by folder
     { id: "tgse26gsd-tozofret", title: "2048", img: "tozofret.jpg", category: "", tags: ["100% working"], plays: 0 },
     { id: "tgse26gsd-cedoge", title: "Chrome Dino Game", img: "cedoge.jpg", category: "", tags: ["100% working"], plays: 0 },
@@ -17,10 +14,10 @@ const gamesList = [
     { id: "tgse26gsd-fh", title: "Fish", img: "unitywgl/fh.jpg", params: "?game=unitywgl/fh|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
     { id: "tgse26gsd-ggorit", title: "Getting Over It", img: "unitywgl/ggorit.jpg", params: "?game=unitywgl/ggorit|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
     { id: "tgse26gsd-pepygd", title: "People Playground", img: "unitywgl/pepygd.jpg", params: "?game=unitywgl/pepygd|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
-    { id: "tgse26gsd-sdss", title: "Speed Starts", img: "unitywgl/sdss.jpg", params: "?game=unitywgl/sdss|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
+    { id: "tgse26gsd-sdss", title: "Speed Stars", img: "unitywgl/sdss.jpg", params: "?game=unitywgl/sdss|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
     { id: "tgse26gsd-slbyrnay", title: "Schoolboy Runaway", img: "unitywgl/slbyrnay.jpg", params: "?game=unitywgl/slbyrnay|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
     { id: "tgse26gsd-statmdnt", title: "Shift At Midnight", img: "unitywgl/statmdnt.jpg", params: "?game=unitywgl/statmdnt|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
-    { id: "tgse26gsd-temninteww", title: "The Man In The Window", img: "unitywgl/temninteww.jpg", params: "?game=unitywgl/temninteww|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
+    { id: "tgse26gsd-temnfmteww", title: "The Man From The Window", img: "unitywgl/temnfmteww.jpg", params: "?game=unitywgl/temnfmteww|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
     { id: "tgse26gsd-uakl", title: "Ultrakill", img: "unitywgl/uakl.jpg", params: "?game=unitywgl/uakl|.1system/unity/index", category: "", tags: ["100% working"], plays: 0 },
 
     //Unity Legacy WebGL
@@ -29,7 +26,27 @@ const gamesList = [
 
     //Unorganized
     { id: "tgse26gsd-awee", title: "Arrow Escape", img: "awee.jpg", category: "", tags: ["100% working"], plays: 0 },
+
+    //Minecraft
     { id: "tgse26gsd-mectpe061aa", title: "Minecraft PE v0.6.1 alpha", img: "mect/mectpe061aa.jpg", category: "", params: "|mect/mectpe061aa/index", tags: [], plays: 0 },
+    { id: "tgse26gsd-mect152", title: "Minecraft 1.5.2", img: "mect/mect.1.5.2.jpg", category: "", tags: [], plays: 0 },
+    { id: "tgse26gsd-mect188", title: "Minecraft 1.8.8", img: "mect/mect.1.8.8.jpg", category: "", tags: [], plays: 0 },
+    { id: "tgse26gsd-mect1122", title: "Minecraft 1.12.2", img: "mect/mect.1.12.2.jpg", category: "", tags: [], plays: 0 },
+    { id: "tgse26gsd-mect262", title: "Minecraft 26.2", img: "mect/mect.26.2.jpg", category: "", tags: [], plays: 0 },
+    { id: "tgse26gsd-mect13", title: "Minecraft Beta 1.3", img: "mect/mect.beta.1.3.jpg", category: "", tags: [], plays: 0 },
+    { id: "tgse26gsd-mect173", title: "Minecraft Beta 1.7.3", img: "mect/mect.beta.1.7.3.jpg", category: "", tags: [], plays: 0 },
+    { id: "tgse26gsd-mectindv", title: "Minecraft Indev", img: "mect/mect.indev.jpg", category: "", tags: [], plays: 0 },
+
+    //Clicker Games
+    { id: "tgse26gsd-cooecr", title: "Cookie Clicker", img: "clickers/cooecr.jpg", category: "", params: "|clickers/cooecr/index", tags: [], plays: 0 },
+    //{ id: "tgse26gsd-", title: "", img: "clickers/.jpg", category: "", params: "|clickers//index", tags: [], plays: 0 },
+    //{ id: "tgse26gsd-", title: "", img: "clickers/.jpg", category: "", params: "|clickers//index", tags: [], plays: 0 },
+    //{ id: "tgse26gsd-", title: "", img: "clickers/.jpg", category: "", params: "|clickers//index", tags: [], plays: 0 },
+    //{ id: "tgse26gsd-", title: "", img: "clickers/.jpg", category: "", params: "|clickers//index", tags: [], plays: 0 },
+    //{ id: "tgse26gsd-", title: "", img: "clickers/.jpg", category: "", params: "|clickers//index", tags: [], plays: 0 },
+    //{ id: "tgse26gsd-", title: "", img: "clickers/.jpg", category: "", params: "|clickers//index", tags: [], plays: 0 },
+    //{ id: "tgse26gsd-", title: "", img: "clickers/.jpg", category: "", params: "|clickers//index", tags: [], plays: 0 },
+    //{ id: "tgse26gsd-", title: "", img: "clickers/.jpg", category: "", params: "|clickers//index", tags: [], plays: 0 },
     
     //Flash Ruffle
     { id: "tgse26gsd-pasbaa", title: "Papa's Bakeria", img: "pasga/pasbaa.jpg", params: "?game=pasga/pasbaa|.1system/ruffle", category: "", tags: ["100% working"], plays: 0 },
