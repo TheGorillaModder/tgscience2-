@@ -79,11 +79,6 @@
         }
         .home-stats h1 { font-size: 3rem; margin-bottom: 10px; color: var(--accent-color); }
         .home-stats p { font-size: 1.2rem; opacity: 0.8; margin-bottom: 20px; }
-        .milestone-badge {
-            display: inline-block; padding: 10px 20px;
-            background: rgba(0, 113, 227, 0.1); color: var(--accent-color);
-            border-radius: 30px; font-weight: 600; font-size: 0.95rem;
-        }
 
         .controls-bar {
             display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 24px;
@@ -128,6 +123,142 @@
             display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end;
         }
         .tag-badge { background: rgba(0,0,0,0.6); color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.7rem; backdrop-filter: blur(4px); }
+
+        /* Request Page & Suggest Cover Page Styling */
+        .request-hero {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+        .suggest-trigger-btn {
+            padding: 16px 40px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(0, 113, 227, 0.4);
+            margin-top: 15px;
+        }
+        .suggest-trigger-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 113, 227, 0.6);
+        }
+
+        .requests-list-container {
+            margin-top: 20px;
+        }
+        .requests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .request-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .request-card h3 {
+            font-size: 1.1rem;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+            word-break: break-word;
+        }
+        .request-card a {
+            color: var(--text-color);
+            opacity: 0.8;
+            font-size: 0.85rem;
+            text-decoration: underline;
+            word-break: break-all;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+        .request-card .request-date {
+            font-size: 0.75rem;
+            opacity: 0.5;
+            text-align: right;
+        }
+
+        .hidden-form-cover {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            max-width: 600px;
+            margin: 40px auto;
+        }
+        .hidden-form-cover h2 {
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+            color: var(--accent-color);
+        }
+        .hidden-form-cover p {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: left;
+        }
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .form-group input {
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-size: 1rem;
+            outline: none;
+        }
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        .submit-btn {
+            flex: 1;
+            padding: 14px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .submit-btn:hover { opacity: 0.9; }
+        .cancel-btn {
+            padding: 14px 24px;
+            background: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .cancel-btn:hover { background: rgba(255,255,255,0.05); }
 
         .modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -177,213 +308,65 @@
             outline: none;
         }
 
-.movies-controls {
-    display: flex;
-    gap: 12px;
-}
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 160px);
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+        }
 
-.movies-controls input {
-    flex-grow: 1;
-    padding: 12px 20px;
-    border-radius: 12px;
-    border: 1px solid var(--glass-border);
-    background: var(--card-bg);
-    color: var(--text-color);
-    font-size: 1rem;
-    outline: none;
-}
+        .chat-display {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
 
-.movies-controls button {
-    padding: 12px 24px;
-    border-radius: 12px;
-    background: var(--accent-color);
-    color: white;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-}
+        .user-message { align-self: flex-end; flex-direction: row-reverse; }
+        .ai-message { align-self: flex-start; }
 
-.movies-controls button:hover {
-    transform: scale(1.02);
-    opacity: 0.9;
-}
+        .avatar {
+            width: 36px; height: 36px; border-radius: 50%; background: var(--accent-color);
+            color: white; display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 0.8rem; flex-shrink: 0;
+        }
 
+        .user-message .message-content {
+            background: var(--accent-color); color: white; padding: 16px 20px;
+            border-radius: 20px 20px 4px 20px; font-size: 1rem;
+        }
 
-.music-controls {
-    display: flex;
-    gap: 12px;
-}
+        .ai-message .message-content {
+            background: var(--bg-color); color: var(--text-color); padding: 16px 20px;
+            border-radius: 20px 20px 20px 4px; border: 1px solid var(--glass-border);
+            font-size: 1rem; line-height: 1.6;
+        }
 
-.music-controls input {
-    flex-grow: 1;
-    padding: 12px 20px;
-    border-radius: 12px;
-    border: 1px solid var(--glass-border);
-    background: var(--card-bg);
-    color: var(--text-color);
-    font-size: 1rem;
-    outline: none;
-}
+        .chat-input-area {
+            padding: 20px; background: var(--bg-color); border-top: 1px solid var(--glass-border);
+            display: flex; gap: 12px;
+        }
 
-.music-controls button {
-    padding: 12px 24px;
-    border-radius: 12px;
-    background: var(--accent-color);
-    color: white;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-}
+        .chat-input-area input {
+            flex-grow: 1; padding: 14px 24px; border-radius: 30px;
+            border: 1px solid var(--glass-border); background: var(--card-bg);
+            color: var(--text-color); outline: none; font-size: 1rem;
+        }
 
-.music-controls button:hover {
-    transform: scale(1.02);
-    opacity: 0.9;
-}
-
-.chat-container {
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - 160px);
-    background: var(--card-bg);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    border: 1px solid var(--glass-border);
-    overflow: hidden;
-}
-
-.chat-display {
-    flex-grow: 1;
-    padding: 30px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-}
-
-.chat-message .message-content h1,
-.chat-message .message-content h2,
-.chat-message .message-content h3 {
-    margin: 8px 0 4px 0;
-    font-size: 1.1rem;
-}
-
-.chat-message .message-content ul,
-.chat-message .message-content ol {
-    margin: 6px 0 6px 20px;
-    padding-left: 10px;
-}
-
-.chat-message .message-content li {
-    margin-bottom: 4px;
-}
-
-.chat-message .message-content p {
-    margin: 4px 0;
-}
-
-.chat-message .message-content code {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-family: monospace;
-}
-
-.user-message {
-    align-self: flex-end;
-    flex-direction: row-reverse;
-}
-
-.ai-message {
-    align-self: flex-start;
-}
-
-.avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--accent-color);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 0.8rem;
-    flex-shrink: 0;
-}
-
-.user-message .message-content {
-    background: var(--accent-color);
-    color: white;
-    padding: 16px 20px;
-    border-radius: 20px 20px 4px 20px;
-    font-size: 1rem;
-}
-
-.ai-message .message-content {
-    background: var(--bg-color);
-    color: var(--text-color);
-    padding: 16px 20px;
-    border-radius: 20px 20px 20px 4px;
-    border: 1px solid var(--glass-border);
-    font-size: 1rem;
-    line-height: 1.6;
-}
-
-.chat-input-area {
-    padding: 20px;
-    background: var(--bg-color);
-    border-top: 1px solid var(--glass-border);
-    display: flex;
-    gap: 12px;
-}
-
-.chat-input-area input {
-    flex-grow: 1;
-    padding: 14px 24px;
-    border-radius: 30px;
-    border: 1px solid var(--glass-border);
-    background: var(--card-bg);
-    color: var(--text-color);
-    outline: none;
-    font-size: 1rem;
-}
-
-.chat-input-area button {
-    padding: 0 28px;
-    border-radius: 30px;
-    background: var(--text-color);
-    color: var(--bg-color);
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.info-btn-transparent {
-    background: transparent;
-    border: none;
-    outline: none;
-    padding: 0;
-    cursor: pointer;
-    display: inline-flex;
-    margin-left: 15px;
-    transition: transform 0.2s ease;
-}
-
-.info-btn-transparent:hover {
-    transform: scale(1.1);
-}
-
-.info-btn-transparent img {
-    display: block;
-}
+        .chat-input-area button {
+            padding: 0 28px; border-radius: 30px; background: var(--text-color);
+            color: var(--bg-color); border: none; font-weight: 600; cursor: pointer;
+            transition: var(--transition);
+        }
         
         .hidden { display: none !important; }
     </style>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9615585055977146"
-     crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -392,29 +375,24 @@
         <div class="nav-links">
             <button class="active" onclick="switchTab('home')">Home</button>
             <button onclick="switchTab('games')">Games</button>
-            <!--<button onclick="switchTab('movies')">Movies</button>
-            <button onclick="switchTab('music')">Music</button>
-            <button onclick="switchTab('ai')">AI</button>
-            <button onclick="switchTab('pr0xy')">Pr0xy</button>-->
+            <button onclick="switchTab('request')">Request</button>
+            <button onclick="switchTab('xandy')">Xandy</button>
         </div>
         <button class="theme-btn" onclick="toggleTheme()">☀️ / 🌙</button>
     </header>
 
     <main>
+        <!-- Home View -->
         <section id="view-home" class="view-section active">
             <div class="home-stats">
                 <h2>Total Website Plays</h2>
                 <h1 id="global-plays-display">Loading...</h1>
-                <!--<h2>Total AI Requests</h2>
-                <h1 id="global-ai-requests-display">Loading...</h1>
-                <h2>Total AI Tokens Used</h2>
-                <h1 id="global-ai-tokens-display">Loading...</h1>-->
                 <p style="margin-top: 15px;">Session Time: <span id="time-on-page-display">0s</span></p>
                 <p>Thanks for playing and supporting the platform!</p>
-                <!--<div class="milestone-badge">🚀 About 1000 plays and a proxy gets added!</div>-->
             </div>
         </section>
 
+        <!-- Games View -->
         <section id="view-games" class="view-section">
             <div class="controls-bar">
                 <label>Sort By: 
@@ -437,66 +415,55 @@
                 <label>Filter Tag:
                     <select id="tag-select" onchange="renderGames()">
                         <option value="all">All Tags</option>
-                        </select>
+                    </select>
                 </label>
 
                 <input type="text" id="game-search" placeholder="Search for Games..." onkeyup="searchGames()">
             </div>
 
-            <div id="games-container">
+            <div id="games-container"></div>
+        </section>
 
+        <!-- Request View (Standalone Page with Button & Submitted Requests) -->
+        <section id="view-request" class="view-section">
+            <div class="request-hero">
+                <h2>Game Request Hub</h2>
+                <p style="margin-top: 8px; opacity: 0.8;">Have a game you want added to TG Science?</p>
+                <button class="suggest-trigger-btn" onclick="openSuggestForm()">Suggest</button>
+            </div>
+
+            <div class="requests-list-container">
+                <h3 style="margin-bottom: 16px; border-bottom: 1px solid var(--glass-border); padding-bottom: 8px;">Previous Requests</h3>
+                <div id="requests-grid" class="requests-grid">
+                    <p style="opacity: 0.6; grid-column: 1/-1;">Loading requests...</p>
+                </div>
             </div>
         </section>
 
-        <section id="view-movies" class="view-section">
-            <div class="movies-controls controls-bar">
-                <input type="text" id="movie-search" placeholder="Search for TV Shows..." onkeyup="if(event.key === 'Enter') searchMovies()">
-                <button onclick="searchMovies()">Search</button>
-            </div>
-            <div id="movies-container" class="games-grid">
-                </div>
+        <!-- Special guy -->
+        <section id="view-xandy" class="view-section">
+            <img src="images/.1system/xandy.jpg">
         </section>
 
-        <section id="view-music" class="view-section">
-            <div class="music-controls controls-bar">
-                <input type="text" id="music-search" placeholder="Search for Music..." onkeyup="if(event.key === 'Enter') searchMusic()">
-                <button onclick="searchMusic()">Search</button>
-            </div>
-            <div id="music-container" class="games-grid">
-            </div>
-        </section>
+        <!-- Hidden Cover Page for Submitting a Suggestion (Not in title bar header) -->
+        <section id="view-suggest-form" class="view-section">
+            <div class="hidden-form-cover">
+                <h2>Submit a Game Suggestion</h2>
+                <p>Enter the game details below along with an existing website link to prove it is runnable on the web.</p>
+                
+                <div class="form-group">
+                    <label for="req-game-name">Game Name *</label>
+                    <input type="text" id="req-game-name" placeholder="e.g. Retro Bowl, Slope..." required>
+                </div>
 
-        <section id="view-ai" class="view-section">
-            <div class="chat-container">
-                <div class="controls-bar" style="justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
-                    <div style="display: flex; gap: 15px;">
-                        <div style="font-weight: 600;">Session Requests: <span id="session-ai-req" style="color: var(--accent-color);">0</span></div>
-                        <div style="font-weight: 600;">Tokens Used: <span id="session-ai-tokens" style="color: var(--accent-color);">0</span></div>
-                    </div>
-                    <div class="model-select-wrapper" style="position: relative; display: inline-block;">
-                        <select id="model-selector" style="appearance: none; -webkit-appearance: none; -moz-appearance: none; padding: 6px 32px 6px 12px; border-radius: 6px; background: rgba(15, 23, 42, 0.8); color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.15); font-size: 13px; font-family: inherit; font-weight: 500; cursor: pointer; transition: all 0.2s ease; outline: none;" onmouseover="this.style.borderColor='var(--accent-color, #3b82f6)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.15)'" onfocus="this.style.borderColor='var(--accent-color, #3b82f6)'; this.style.boxShadow='0 0 0 2px rgba(59, 130, 246, 0.2)'" onblur="this.style.boxShadow='none'">
-                            <option value="gemini-3.1-flash-lite" style="background: #0f172a; color: #f8fafc;">Gemini 3.1 Flash-Lite</option>
-                            <option value="gemini-3.5-flash-lite" style="background: #0f172a; color: #f8fafc;">Gemini 3.5 Flash-Lite</option>
-                            <option value="gemini-3-flash-preview" style="background: #0f172a; color: #f8fafc;">Gemini 3 Flash-Preview</option>
-                            <option value="gemini-3.5-flash" style="background: #0f172a; color: #f8fafc;">Gemini 3.5 Flash</option>
-                            <option value="gemini-3.6-flash" style="background: #0f172a; color: #f8fafc;">Gemini 3.6 Flash</option>
-                            <option value="gemini-3.7-flash" style="background: #0f172a; color: #f8fafc;">Gemini 3.7 Flash</option>
-                            <option value="gemini-3.8-flash" style="background: #0f172a; color: #f8fafc;">Gemini 3.8 Flash</option>
-                        </select>
-                        <div style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: rgba(255, 255, 255, 0.6); font-size: 10px;">
-                            ▼
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label for="req-game-url">Example Website Link (Proof of concept)</label>
+                    <input type="url" id="req-game-url" placeholder="https://example.com/game">
                 </div>
-                <div id="chat-display" class="chat-display">
-                    <div class="chat-message ai-message">
-                        <div class="avatar">AI</div>
-                        <div class="message-content">Hello! I'm Gemini. Where shall we start?</div>
-                    </div>
-                </div>
-                <div class="chat-input-area">
-                    <input type="text" id="ai-input" placeholder="Message AI..." onkeyup="if(event.key === 'Enter') sendAiMessage()" autocomplete="off">
-                    <button onclick="sendAiMessage()">Send</button>
+
+                <div class="form-actions">
+                    <button class="cancel-btn" onclick="switchTab('request')">Back</button>
+                    <button class="submit-btn" onclick="submitGameRequest()">Submit Request</button>
                 </div>
             </div>
         </section>
@@ -506,15 +473,11 @@
         </section>
     </main>
 
+    <!-- Game Modal -->
     <div id="game-modal" class="modal-overlay">
         <div class="modal-content" id="modal-content">
             <div class="modal-header">
-                <div class="modal-title" id="modal-game-title">
-                    Game Title
-                </div>
-                <button class="info-btn-transparent" onclick="openAiModal()" title="Quick AI Help">
-                    <!--<img width="25px" height="25px" src="images/.1system/help.png" alt="Help">-->
-                </button>
+                <div class="modal-title" id="modal-game-title">Game Title</div>
                 <div class="modal-stats">
                     <div id="modal-game-plays">Plays: 0</div>
                     <div id="modal-game-time">Session: 0s</div>
@@ -525,44 +488,15 @@
                 </div>
             </div>
             <div class="modal-body" id="modal-game-area">
-                <iframe src="games/.1system/gnf404.html"></iframe>
+                <iframe src="games/.1system/gnf404.html" sandbox="allow-scripts allow-same-origin allow-forms allow-modals"></iframe>
             </div>
         </div>
     </div>
 
-    <div id="ai-modal" class="modal-overlay">
-        <div class="modal-content" style="max-width: 600px; height: 80vh;">
-            <div class="modal-header">
-                <div class="modal-title">AI Assistant</div>
-                <div class="modal-controls">
-                    <button onclick="closeAiModal()">Close</button>
-                </div>
-            </div>
-            <div class="modal-body" style="background: var(--card-bg); display: flex; flex-direction: column; padding: 0;">
-                <div id="popup-chat-display" class="chat-display" style="flex-grow: 1; padding: 20px;">
-                    <div class="chat-message ai-message">
-                        <div class="avatar">AI</div>
-                        <div class="message-content">Hello! How can I help you?</div>
-                    </div>
-                </div>
-                <div class="chat-input-area" style="border-radius: 0 0 var(--border-radius) var(--border-radius);">
-                    <input type="text" id="popup-ai-input" placeholder="Message AI..." onkeyup="if(event.key === 'Enter') sendPopupAiMessage()" autocomplete="off">
-                    <button onclick="sendPopupAiMessage()">Send</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/eruda/3.4.3/eruda.min.js"></script>
-    <script>eruda.init();</script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>-->
     <script src="gamesList.js"></script>
     <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-    import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
-    //import { GoogleGenAI } from "https://esm.sh/@google/genai";
-
-    //const ai = new GoogleGenAI({ apiKey: ""});
+    import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyChKLyS1RFT1vix8qMa1iiDJ3QV9o_6X30",
@@ -577,10 +511,6 @@
     let db;
     let globalPlays = 0;
     let isFirebaseActive = false;
-    let globalAiRequests = 0;
-    let globalAiTokens = 0;
-    let sessionAiRequests = 0;
-    let sessionAiTokens = 0;
     let sessionTimeSeconds = 0;
     let currentGame = "";
 
@@ -604,11 +534,106 @@
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.nav-links button').forEach(el => el.classList.remove('active'));
         
-        document.getElementById(`view-${tabId}`).classList.add('active');
+        const targetView = document.getElementById(`view-${tabId}`);
+        if (targetView) targetView.classList.add('active');
         
-        const btn = Array.from(document.querySelectorAll('.nav-links button')).find(b => b.getAttribute('onclick').includes(tabId));
+        const btn = Array.from(document.querySelectorAll('.nav-links button')).find(b => b.getAttribute('onclick').includes(`'${tabId}'`));
         if (btn) btn.classList.add('active');
+
+        if (tabId === 'request') {
+            fetchRequests();
+        }
     };
+
+    window.openSuggestForm = () => {
+        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+        document.getElementById('view-suggest-form').classList.add('active');
+    };
+
+    window.submitGameRequest = async () => {
+        const nameInput = document.getElementById('req-game-name');
+        const urlInput = document.getElementById('req-game-url');
+
+        const gameName = nameInput ? nameInput.value.trim() : '';
+        const websiteUrl = urlInput ? urlInput.value.trim() : '';
+
+        if (!gameName) {
+            alert("Please enter a game name.");
+            return;
+        }
+
+        const newRequest = {
+            gameName: gameName,
+            websiteUrl: websiteUrl,
+            timestamp: Date.now()
+        };
+
+        if (isFirebaseActive) {
+            try {
+                const reqCol = collection(db, "requests");
+                await addDoc(reqCol, newRequest);
+            } catch (err) {
+                console.error("Error writing request to Firebase:", err);
+            }
+        } else {
+            const localReqs = JSON.parse(localStorage.getItem('game_requests') || '[]');
+            localReqs.push(newRequest);
+            localStorage.setItem('game_requests', JSON.stringify(localReqs));
+        }
+
+        if (nameInput) nameInput.value = '';
+        if (urlInput) urlInput.value = '';
+
+        window.switchTab('request');
+    };
+
+    async function fetchRequests() {
+        const container = document.getElementById('requests-grid');
+        if (!container) return;
+        container.innerHTML = '<p style="opacity: 0.6; grid-column: 1/-1;">Loading requests...</p>';
+
+        let requestsList = [];
+
+        if (isFirebaseActive) {
+            try {
+                const reqCol = collection(db, "requests");
+                const snapshot = await getDocs(reqCol);
+                snapshot.forEach(doc => {
+                    requestsList.push(doc.data());
+                });
+            } catch (e) {
+                console.error("Error reading requests from Firebase:", e);
+                requestsList = JSON.parse(localStorage.getItem('game_requests') || '[]');
+            }
+        } else {
+            requestsList = JSON.parse(localStorage.getItem('game_requests') || '[]');
+        }
+
+        requestsList.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+        container.innerHTML = '';
+        if (requestsList.length === 0) {
+            container.innerHTML = '<p style="opacity: 0.6; grid-column: 1/-1;">No requests yet. Be the first to suggest one!</p>';
+            return;
+        }
+
+        requestsList.forEach(req => {
+            const card = document.createElement('div');
+            card.className = 'request-card';
+            
+            const dateStr = req.timestamp ? new Date(req.timestamp).toLocaleDateString() : '';
+            const linkHtml = req.websiteUrl ? `<a href="${req.websiteUrl}" target="_blank" rel="noopener noreferrer">${req.websiteUrl}</a>` : '<span style="font-size:0.85rem; opacity:0.5; margin-bottom:12px; display:inline-block;">No proof URL provided</span>';
+
+            card.innerHTML = `
+                <div>
+                    <h3>${req.gameName}</h3>
+                    ${linkHtml}
+                </div>
+                <div class="request-date">${dateStr}</div>
+            `;
+            container.appendChild(card);
+        });
+    }
 
     window.toggleTheme = () => {
         const html = document.documentElement;
@@ -618,7 +643,7 @@
 
     function populateTags() {
         const select = document.getElementById("tag-select");
-        if (!select) return;
+        if (!select || typeof flags === 'undefined') return;
         flags.forEach(tag => {
             const opt = document.createElement("option");
             opt.value = tag;
@@ -634,29 +659,23 @@
                 getDoc(globalRef).then(globalSnap => {
                     if (globalSnap.exists()) {
                         globalPlays = globalSnap.data().totalPlays || 0;
-                        globalAiRequests = globalSnap.data().totalAiRequests || 0;
-                        globalAiTokens = globalSnap.data().totalAiTokens || 0;
                     } else {
-                        setDoc(globalRef, { totalPlays: 0, totalAiRequests: 0, totalAiTokens: 0 });
+                        setDoc(globalRef, { totalPlays: 0 });
                     }
                     updateGlobalPlaysUI();
                 });
 
-                const fetchPromises = gamesList.map(async (game) => {
-                    const gameRef = doc(db, "games", game.id);
-                    const gameSnap = await getDoc(gameRef);
-                    
-                    if (gameSnap.exists()) {
-                        game.plays = gameSnap.data().plays || 0;
-
-                        const playCountEl = document.querySelector(`[data-game-id="${game.id}"] .play-count`);
-                        if (playCountEl) {
-                            playCountEl.innerText = `${game.plays} plays`;
+                if (typeof gamesList !== 'undefined') {
+                    const fetchPromises = gamesList.map(async (game) => {
+                        const gameRef = doc(db, "games", game.id);
+                        const gameSnap = await getDoc(gameRef);
+                        
+                        if (gameSnap.exists()) {
+                            game.plays = gameSnap.data().plays || 0;
                         }
-                    }
-                });
-
-                await Promise.all(fetchPromises);
+                    });
+                    await Promise.all(fetchPromises);
+                }
 
                 const sortSelect = document.getElementById('sort-select');
                 if (sortSelect && sortSelect.value.startsWith('plays-')) {
@@ -676,9 +695,11 @@
 
     function loadLocalFallbackData() {
         globalPlays = parseInt(localStorage.getItem('globalPlays') || '0');
-        gamesList.forEach(game => {
-            game.plays = parseInt(localStorage.getItem(`game_${game.id}_plays`) || '0');
-        });
+        if (typeof gamesList !== 'undefined') {
+            gamesList.forEach(game => {
+                game.plays = parseInt(localStorage.getItem(`game_${game.id}_plays`) || '0');
+            });
+        }
     }
 
     async function recordPlay(gameId) {
@@ -709,17 +730,11 @@
     function updateGlobalPlaysUI() {
         const playEl = document.getElementById('global-plays-display');
         if (playEl) playEl.innerText = globalPlays.toLocaleString();
-
-        const aiEl = document.getElementById('global-ai-requests-display');
-        if (aiEl) aiEl.innerText = globalAiRequests.toLocaleString();
-
-        const aiTokensEl = document.getElementById('global-ai-tokens-display');
-        if (aiTokensEl) aiTokensEl.innerText = globalAiTokens.toLocaleString();
     }
 
     window.renderGames = () => {
         const container = document.getElementById('games-container');
-        if (!container) return;
+        if (!container || typeof gamesList === 'undefined') return;
         container.innerHTML = '';
 
         const sortSelect = document.getElementById('sort-select');
@@ -779,12 +794,12 @@
         card.style.backgroundImage = `url('images/${game.img}')`;
         card.onclick = () => openModal(game.id);
 
-        const tagsHtml = game.tags.map(t => `<span class="tag-badge">${t}</span>`).join('');
+        const tagsHtml = (game.tags || []).map(t => `<span class="tag-badge">${t}</span>`).join('');
         card.innerHTML = `
             <div class="card-tags">${tagsHtml}</div>
             <div class="card-overlay">
                 <div class="card-title">${game.title}</div>
-                <div class="card-plays">▶ ${game.plays.toLocaleString()} plays</div>
+                <div class="card-plays">▶ ${(game.plays || 0).toLocaleString()} plays</div>
             </div>
         `;
         return card;
@@ -801,7 +816,7 @@
     } else {
         init();
     }
-    
+
     let playtimeInterval;
     let currentPlaytime = 0;
 
@@ -821,7 +836,7 @@
             }
         }
         document.getElementById('modal-game-title').innerText = game.title;
-        document.getElementById('modal-game-plays').innerText = `Plays: ${game.plays.toLocaleString()}`;
+        document.getElementById('modal-game-plays').innerText = `Plays: ${(game.plays || 0).toLocaleString()}`;
         document.getElementById('game-modal').classList.add('active');
         document.getElementById('modal-game-area').innerHTML = `
         <iframe src='games/${customFilePath}.html${customParams}'></iframe>
@@ -876,7 +891,7 @@
         }
 
         const container = document.getElementById('games-container');
-        if (!container) return;
+        if (!container || typeof gamesList === 'undefined') return;
 
         container.innerHTML = '<p style="text-align:center; width: 100%;">Searching games...</p>';
 
@@ -892,287 +907,6 @@
         gridDiv.className = 'games-grid';
         filteredGames.forEach(game => gridDiv.appendChild(createGameCard(game)));
         container.appendChild(gridDiv);
-    }
-
-    window.searchMovies = async (query = null) => {
-        const searchInput = document.getElementById('movie-search');
-        const searchTerm = query || (searchInput ? searchInput.value.trim() : '') || 'popular';
-        const container = document.getElementById('movies-container');
-        if (!container) return;
-        
-        container.innerHTML = '<p style="text-align:center; width: 100%;">Fetching shows...</p>';
-        
-        try {
-            const res = await fetch(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(searchTerm)}`);
-            const data = await res.json();
-            
-            container.innerHTML = '';
-            if(data.length === 0) {
-                container.innerHTML = '<p style="text-align:center; width: 100%;">No shows found.</p>';
-                return;
-            }
-
-            data.forEach(item => {
-                const show = item.show;
-                const imgUrl = show.image ? show.image.medium : 'images/.1system/noImage.jpg';
-                
-                const card = document.createElement('div');
-                card.className = 'game-card';
-                card.style.backgroundImage = `url('${imgUrl}')`;
-                
-                const rating = show.rating?.average ? `⭐ ${show.rating.average}` : '⭐ N/A';
-                const genres = show.genres?.slice(0, 2).map(g => `<span class="tag-badge">${g}</span>`).join('') || '';
-
-                card.innerHTML = `
-                    <div class="card-tags">${genres}</div>
-                    <div class="card-overlay">
-                        <div class="card-title">${show.name}</div>
-                        <div class="card-plays">${rating} | ${show.premiered ? show.premiered.split('-')[0] : 'Unknown Year'}</div>
-                    </div>
-                `;
-                
-                card.onclick = () => window.open(show.url, '_blank');
-                container.appendChild(card);
-            });
-        } catch (e) {
-            console.error("Movie fetch error:", e);
-            container.innerHTML = '<p>Error fetching data. Check your connection.</p>';
-        }
-    };
-
-window.searchMusic = async (query = null) => {
-    const searchInput = document.getElementById('music-search');
-    const searchTerm = query || (searchInput ? searchInput.value.trim() : '') || 'electronic';
-    const container = document.getElementById('music-container');
-    if (!container) return;
-    
-    container.innerHTML = '<p style="text-align:center; width: 100%;">Fetching full songs...</p>';
-    
-    try {
-        const res = await fetch(`https://freemusicarchive.org/api/get/tracks.json?api_key=6V5X0MCIPYHXGBWD&search_term=${encodeURIComponent(searchTerm)}&limit=25`);
-        const data = await res.json();
-        
-        container.innerHTML = '';
-        if(!data.dataset || data.dataset.length === 0) {
-            container.innerHTML = '<p style="text-align:center; width: 100%;">No music found.</p>';
-            return;
-        }
-
-        data.dataset.forEach(track => {
-            const imgUrl = track.track_image_file || 'https://via.placeholder.com/400x400?text=No+Image';
-            
-            const card = document.createElement('div');
-            card.className = 'game-card';
-            card.style.backgroundImage = `url('${imgUrl}')`;
-            
-            const artist = track.artist_name || 'Unknown Artist';
-            const trackName = track.track_title || 'Unknown Track';
-            const releaseYear = track.track_date_recorded ? track.track_date_recorded.split('-')[0] : '';
-
-            card.innerHTML = `
-                <div class="card-tags"><span class="tag-badge">Full Song</span></div>
-                <div class="card-overlay">
-                    <div class="card-title">${trackName}</div>
-                    <div class="card-plays">${artist} ${releaseYear ? '| ' + releaseYear : ''}</div>
-                </div>
-            `;
-            
-            card.onclick = () => {
-                if (track.track_file) {
-                    window.open(track.track_file, '_blank');
-                } else if (track.track_url) {
-                    window.open(track.track_url, '_blank');
-                }
-            };
-            
-            container.appendChild(card);
-        });
-    } catch (e) {
-        console.error("Music fetch error:", e);
-        container.innerHTML = '<p>Error fetching data. Check your connection.</p>';
-    }
-};
-
-    let chatSession = null;
-
-window.openAiModal = () => {
-    document.getElementById('ai-modal').classList.add('active');
-};
-
-window.closeAiModal = () => {
-    document.getElementById('ai-modal').classList.remove('active');
-};
-
-window.sendPopupAiMessage = async () => {
-    const input = document.getElementById('popup-ai-input');
-    if (!input) return;
-    const text = input.value.trim();
-    if (!text) return;
-    
-    const display = document.getElementById('popup-chat-display');
-    display.innerHTML += `
-        <div class="chat-message user-message">
-            <div class="message-content">${text}</div>
-        </div>
-    `;
-    input.value = '';
-
-    const aiMessageId = 'popup-ai-msg-' + Date.now();
-    display.innerHTML += `
-        <div class="chat-message ai-message">
-            <div class="avatar">AI</div>
-            <div class="message-content" id="${aiMessageId}">Thinking...</div>
-        </div>
-    `;
-    display.scrollTop = display.scrollHeight;
-
-    try {
-        const chat = getChatSession();
-        const response = await chat.sendMessage({ message: (text + `    |    Context: User is playing the game "${currentGame}"`) });
-        
-        typeOutPopupResponse(response.text, aiMessageId);
-
-        sessionAiRequests++;
-        if (document.getElementById('session-ai-req')) {
-            document.getElementById('session-ai-req').innerText = sessionAiRequests;
-        }
-
-        const tokens = response.usageMetadata?.totalTokenCount || 0;
-        sessionAiTokens += tokens;
-        if (document.getElementById('session-ai-tokens')) {
-            document.getElementById('session-ai-tokens').innerText = sessionAiTokens.toLocaleString();
-        }
-
-        globalAiTokens += tokens;
-        globalAiRequests++;
-        updateGlobalPlaysUI();
-
-        if (isFirebaseActive) {
-            const globalRef = doc(db, "stats", "global");
-            await updateDoc(globalRef, { totalAiRequests: increment(1), totalAiTokens: increment(tokens) });
-        } else {
-            localStorage.setItem('globalAiRequests', globalAiRequests);
-            localStorage.setItem('globalAiTokens', globalAiTokens);
-        }
-    } catch (error) {
-        console.error("Popup AI Error:", error);
-        const errEl = document.getElementById(aiMessageId);
-        if (errEl) errEl.innerText = "Sorry, I encountered an error connecting to the AI.";
-    }
-};
-
-let typeSpeed = 3;
-
-function typeOutPopupResponse(text, elementId) {
-    const el = document.getElementById(elementId);
-    if (!el) return;
-    let i = 0;
-    let currentRawText = '';
-    marked.setOptions({
-        breaks: true,
-        gfm: true
-    });
-    const interval = setInterval(() => {
-        for (let j = 0; j < typeSpeed && j < text.length - i; j++) {
-            currentRawText += text.charAt(i + j);
-        }
-        el.innerHTML = marked.parse(currentRawText);
-        i += typeSpeed;
-        const display = document.getElementById('popup-chat-display');
-        if (display) display.scrollTop = display.scrollHeight;
-        if (i >= text.length) {
-            clearInterval(interval);
-            el.innerHTML = marked.parse(text);
-        }
-    }, 1);
-}
-
-    function getChatSession() {
-        const selectedModel = document.getElementById('model-selector').value;
-        if (!chatSession || chatSession.currentModel !== selectedModel) {
-            chatSession = ai.chats.create({
-                model: selectedModel
-            });
-            chatSession.currentModel = selectedModel;
-        }
-        return chatSession;
-    }
-
-    window.sendAiMessage = async () => {
-        const input = document.getElementById('ai-input');
-        if (!input) return;
-        const text = input.value.trim();
-        if(!text) return;
-        
-        const display = document.getElementById('chat-display');
-        display.innerHTML += `
-            <div class="chat-message user-message">
-                <div class="message-content">${text}</div>
-            </div>
-        `;
-        input.value = '';
-
-        const aiMessageId = 'ai-msg-' + Date.now();
-        display.innerHTML += `
-            <div class="chat-message ai-message">
-                <div class="avatar">AI</div>
-                <div class="message-content" id="${aiMessageId}">Thinking...</div>
-            </div>
-        `;
-        display.scrollTop = display.scrollHeight;
-
-        try {
-            const chat = getChatSession();
-            const response = await chat.sendMessage({ message: text });
-            typeOutResponse(response.text, aiMessageId);
-
-            sessionAiRequests++;
-            document.getElementById('session-ai-req').innerText = sessionAiRequests;
-
-            const tokens = response.usageMetadata?.totalTokenCount;
-            sessionAiTokens += tokens;
-            document.getElementById('session-ai-tokens').innerText = sessionAiTokens.toLocaleString();
-
-            globalAiTokens += tokens;
-            globalAiRequests++;
-            updateGlobalPlaysUI();
-
-            if (isFirebaseActive) {
-                const globalRef = doc(db, "stats", "global");
-                await updateDoc(globalRef, { totalAiRequests: increment(1), totalAiTokens: increment(tokens) });
-            } else {
-                localStorage.setItem('globalAiRequests', globalAiRequests);
-                localStorage.setItem('globalAiTokens', globalAiTokens);
-            }
-        } catch (error) {
-            console.error("AI Error:", error);
-            const errEl = document.getElementById(aiMessageId);
-            if (errEl) errEl.innerText = "Sorry, I encountered an error connecting to the AI. Try switching to a different model.";
-        }
-    };
-
-    function typeOutResponse(text, elementId) {
-        const el = document.getElementById(elementId);
-        if (!el) return;
-        let i = 0;
-        let currentRawText = '';
-        marked.setOptions({
-            breaks: true,
-            gfm: true
-        });
-        const interval = setInterval(() => {
-            for (let j = 0; j < typeSpeed && j < text.length - i; j++) {
-                currentRawText += text.charAt(i + j);
-            }
-            el.innerHTML = marked.parse(currentRawText);
-            i += typeSpeed;
-            const display = document.getElementById('chat-display');
-            if (display) display.scrollTop = display.scrollHeight;
-            if (i >= text.length) {
-                clearInterval(interval);
-                el.innerHTML = marked.parse(text);
-            }
-        }, 1);
     }
 </script>
 </body>
